@@ -164,16 +164,20 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 	        		theForm.fields.elementAt(i).obj = new XmlGuiEditBox(mContext,(theForm.fields.elementAt(i).isRequired() ? "*" : "") + theForm.fields.elementAt(i).getLabel(),"");
 	        		mLl.addView((View) theForm.fields.elementAt(i).obj);
 	        	}
-	        	if (theForm.fields.elementAt(i).getType().equals("numeric")) {
+	        	else if (theForm.fields.elementAt(i).getType().equals("numeric")) {
 	        		theForm.fields.elementAt(i).obj = new XmlGuiEditBox(mContext,(theForm.fields.elementAt(i).isRequired() ? "*" : "") + theForm.fields.elementAt(i).getLabel(),"");
 	        		((XmlGuiEditBox)theForm.fields.elementAt(i).obj).makeNumeric();
 	        		mLl.addView((View) theForm.fields.elementAt(i).obj);
 	        	}
-	        	if (theForm.fields.elementAt(i).getType().equals("choice")) {
+	        	else if (theForm.fields.elementAt(i).getType().equals("auto")) {
+	        		theForm.fields.elementAt(i).obj = new XmlGuiAutomatic(mContext,(theForm.fields.elementAt(i).isRequired() ? "*" : "") + theForm.fields.elementAt(i).getLabel(),"");
+	        		mLl.addView((View) theForm.fields.elementAt(i).obj);
+	        	}
+	        	else if (theForm.fields.elementAt(i).getType().equals("choice")) {
 	        		theForm.fields.elementAt(i).obj = new XmlGuiPickOne(mContext,(theForm.fields.elementAt(i).isRequired() ? "*" : "") + theForm.fields.elementAt(i).getLabel(),theForm.fields.elementAt(i).getOptions());
 	        		mLl.addView((View) theForm.fields.elementAt(i).obj);
 	        	}
-	        	if (theForm.fields.elementAt(i).getType().equals("boolean")) {
+	        	else if (theForm.fields.elementAt(i).getType().equals("boolean")) {
 	        		theForm.fields.elementAt(i).obj = new XmlGuiBoolean(mContext,(theForm.fields.elementAt(i).isRequired() ? "*" : "") + theForm.fields.elementAt(i).getLabel());
 	        		mLl.addView((View) theForm.fields.elementAt(i).obj);
 	        	}
@@ -269,7 +273,7 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 							good = false;
 						}
 					}
-					if (theForm.fields.elementAt(i).getType().equals("boolean")) {
+					if (theForm.fields.elementAt(i).getType().equals("boolean") || theForm.fields.elementAt(i).getType().equals("auto")) {
 						good = true;
 					}
 						

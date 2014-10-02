@@ -16,6 +16,7 @@ public class XmlGuiFormField {
 	String type;
 	boolean required;
 	String options;
+	String autoLib;
 	Object obj;			// holds the ui implementation , i.e. the EditText for example
 	
 	
@@ -50,6 +51,12 @@ public class XmlGuiFormField {
 	public void setOptions(String options) {
 		this.options = options;
 	}
+	public String getLib() {
+		return autoLib;
+	}
+	public void setLib(String autoLib) {
+		this.autoLib = autoLib;
+	}
 	
 	public String toString()
 	{
@@ -59,6 +66,7 @@ public class XmlGuiFormField {
 		sb.append("Field Type: " + this.type + "\n");
 		sb.append("Required? : " + this.required + "\n");
 		sb.append("Options : " + this.options + "\n");
+		sb.append("Lib :" + this.autoLib + "\n");
 		sb.append("Value : " + (String) this.getData() + "\n");
 		
 		return sb.toString();
@@ -85,6 +93,11 @@ public class XmlGuiFormField {
 		} else if (type.equals("boolean")) {
 			if (obj != null) {
 				XmlGuiBoolean bo = (XmlGuiBoolean) obj;
+				return bo.getValue();
+			}
+		} else if (type.equals("auto")) {
+			if (obj != null) {
+				XmlGuiAutomatic bo = (XmlGuiAutomatic) obj;
 				return bo.getValue();
 			}
 		}
