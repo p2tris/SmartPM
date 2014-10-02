@@ -25,8 +25,13 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import ut.ee.SmartPM.R;
+import ut.ee.SmartPM.lib.LibLoader;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
@@ -40,14 +45,16 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 
     Context mContext;
     LinearLayout mLl;
+    Button mBtn;
     
     String tag = "DynamicFormXML";
 	XmlGuiForm theForm;
 
-    public DoInBackground(Context context, LinearLayout ll) {
+    public DoInBackground(Context context, LinearLayout ll, Button btn) {
 
         this.mContext = context;
         this.mLl = ll;
+        this.mBtn = btn;
     }
     
     @Override
@@ -68,8 +75,8 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
     }
 
 
-    private void getFormData(String string) {
-    	String url = "http://halapuu.host56.com/pn/xmlgui1.xml";
+    private void getFormData(String url) {
+//    	String url = "http://halapuu.host56.com/pn/xmlgui1.xml";
     	
     	try {
 			Log.i(tag,"ProcessForm");
@@ -184,49 +191,84 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 	        }
 	        
 	        
-	        Button btn = new Button(mContext);
-	        btn.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
-	        
-	        mLl.addView(btn);
-	        
-	        btn.setText("Submit");
-	        btn.setOnClickListener(new Button.OnClickListener() {
+	        mBtn.setText("Start");
+	        mBtn.setBackgroundColor(Color.GREEN);
+	        mBtn.setClickable(true);
+	        mLl.setVisibility(View.INVISIBLE);
+	        mBtn.setOnClickListener(new Button.OnClickListener() {
 	        	public void onClick(View v) {
 	        		// check if this form is Valid
-	        		if (!CheckForm())
-	        		{
-	        			AlertDialog.Builder bd = new AlertDialog.Builder(mLl.getContext());
-	            		AlertDialog ad = bd.create();
-	            		ad.setTitle("Error");
-	            		ad.setMessage("Please enter all required (*) fields");
-	            		ad.show();
-	            		return;
-
-	        		}
-	        		if (theForm.getSubmitTo().equals("loopback")) {
-	        			// just display the results to the screen
-	        			String formResults = theForm.getFormattedResults();
-	        			Log.i(tag,formResults);
-	        			AlertDialog.Builder bd = new AlertDialog.Builder(mLl.getContext());
-	            		AlertDialog ad = bd.create();
-	            		ad.setTitle("Results");
-	            		ad.setMessage(formResults);
-	            		ad.show();
-	            		return;
+	        		if(mBtn.getText() == "Start"){
+	        			mBtn.setText("Stop");
+	        			mBtn.setBackgroundColor(Color.RED);
+	        			mBtn.setClickable(true);
 	        			
-	        		} else {
-	        			if (!SubmitForm()) {
+	        	        mLl.setVisibility(View.VISIBLE);
+
+	        			
+	        			// At the moment we start loading libraries etc. when task is started (because in case of interruption certain lib might
+	        			// not be needed anymore).
+	        			Log.d("APP", "before libloader");
+	        			
+	        			LibLoader libLoader = new LibLoader(mContext.getApplicationContext());  
+	        			
+	        			Log.d("APP", "after libloader");
+	        			
+	        			// TODO: Notify server about task being started
+	        			
+	        		} else if (mBtn.getText() == "Stop") {
+		        		if (!CheckForm())
+		        		{
 		        			AlertDialog.Builder bd = new AlertDialog.Builder(mLl.getContext());
 		            		AlertDialog ad = bd.create();
 		            		ad.setTitle("Error");
-		            		ad.setMessage("Error submitting form");
+		            		ad.setMessage("Please enter all required (*) fields");
 		            		ad.show();
 		            		return;
-	        			}
-	        		}
-	        		
+	
+		        		}
+		        		
+	        			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mLl.getContext());
+	        			// set title
+	        			alertDialogBuilder.setTitle("Confirm");
+	         
+	        			// set dialog message
+	        			alertDialogBuilder
+	        				.setMessage("Are you sure it is done?!")
+	        				.setCancelable(false)
+	        				.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+	        					public void onClick(DialogInterface dialog,int id) {
+	        						if (!SubmitForm()) {
+	        		        			AlertDialog.Builder bd = new AlertDialog.Builder(mLl.getContext());
+	        		            		AlertDialog ad = bd.create();
+	        		            		ad.setTitle("Error");
+	        		            		ad.setMessage("Error submitting form");
+	        		            		ad.show();
+	        		            		return;
+	        	        			}else {
+	        	        				mBtn.setText("Done");
+	        	        				mBtn.setBackgroundColor(Color.GRAY);
+	        	        				mBtn.setClickable(false);
+	        	        			}
+	        					}
+	        				  })
+	        				.setNegativeButton("No",new DialogInterface.OnClickListener() {
+	        					public void onClick(DialogInterface dialog,int id) {
+	        						// if this button is clicked, just close
+	        						// the dialog box and do nothing
+	        						dialog.cancel();
+	        					}
+	        				});
+	         
+	        				// create alert dialog
+	        				AlertDialog alertDialog = alertDialogBuilder.create();
+	         
+	        				// show it
+	        				alertDialog.show();
+						 	        		
+		        	}
 	        	}
-	        } );
+		        } );
 		} catch (Exception e) {
 			Log.e(tag,"Error Displaying Form");
 		}

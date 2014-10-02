@@ -28,7 +28,7 @@ public class MainActivity extends Activity {
 	TextView lblMessage;
 	Controller aController;
 	public LinearLayout ll;
-	Button execute;
+	Button executeBtn;
 	
 	// Asyntask
 	AsyncTask<Void, Void, Void> mRegisterTask;
@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
 		email = i.getStringExtra("email");		
 		
 		lblMessage = (TextView) findViewById(R.id.lblMessage);
-		execute = (Button)findViewById(R.id.StartStop);
+		executeBtn = (Button)findViewById(R.id.StartStop);
 		
 		// Make sure the device has the proper dependencies.
 		GCMRegistrar.checkDevice(this);
@@ -126,71 +126,14 @@ public class MainActivity extends Activity {
 		
 		if (lblMessage.getText() == "") {
 			lblMessage.setText("No tasks!");
-			execute.setClickable(false);
-			execute.setBackgroundColor(Color.GRAY);
+			executeBtn.setClickable(false);
+			executeBtn.setBackgroundColor(Color.GRAY);
 		}
 		
 //		new DoInBackground(getApplicationContext(), ll).execute("http://halapuu.host56.com/pn/xmlgui1.xml");
 		
 	}		
 	
-	public void executeTask(View v)
-	{
-				
-		if (execute.getText() == "Start") {
-			execute.setText("Stop");
-			execute.setBackgroundColor(Color.RED);
-			execute.setClickable(true);
-			
-			// At the moment we start loading libraries etc. when task is started (because in case of interruption certain lib might
-			// not be needed anymore).
-			Log.d("APP", "before libloader");
-			
-			LibLoader libLoader = new LibLoader(getApplicationContext());  
-			
-			Log.d("APP", "after libloader");
-			
-			// TODO: Notify server about task being started
-			
-		} else {
-			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-			// set title
-			alertDialogBuilder.setTitle("Confirm");
- 
-			// set dialog message
-			alertDialogBuilder
-				.setMessage("Are you sure it is done?!")
-				.setCancelable(false)
-				.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,int id) {
-						execute.setText("Done");
-						execute.setBackgroundColor(Color.GRAY);
-						execute.setClickable(false);
-						lblMessage.append("\n Done, no tasks for you!");
-					}
-				  })
-				.setNegativeButton("No",new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,int id) {
-						// if this button is clicked, just close
-						// the dialog box and do nothing
-						dialog.cancel();
-					}
-				});
- 
-				// create alert dialog
-				AlertDialog alertDialog = alertDialogBuilder.create();
- 
-				// show it
-				alertDialog.show();
-			}
-			
-			
-			// TODO: Notify server about task being done
-			
-		
-		
-	}
-
 	// Create a broadcast receiver to get message and show on screen 
 	private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
 		
@@ -208,13 +151,8 @@ public class MainActivity extends Activity {
 			Toast.makeText(getApplicationContext(), "Got Message: " + newMessage, Toast.LENGTH_LONG).show();
 			
 			LinearLayout ll = (LinearLayout) findViewById(R.id.ll);
-			new DoInBackground(getApplicationContext(), ll).execute("http://halapuu.host56.com/pn/xmlgui1.xml");
+			new DoInBackground(getApplicationContext(), ll, executeBtn).execute("http://halapuu.host56.com/pn/xmlgui1.xml");
 									
-			// Set execution available
-			execute.setText("Start");
-			execute.setBackgroundColor(Color.GREEN);
-			execute.setClickable(true);
-			
 			// Releasing wake lock
 			aController.releaseWakeLock();
 			
