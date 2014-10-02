@@ -99,7 +99,6 @@ public class MainActivity extends Activity {
 				// It's also necessary to cancel the thread onDestroy(),
 				// hence the use of AsyncTask instead of a raw thread.
 				
-//				final Context context = this;
 				mRegisterTask = new AsyncTask<Void, Void, Void>() {
 
 					@Override
@@ -129,9 +128,7 @@ public class MainActivity extends Activity {
 			executeBtn.setClickable(false);
 			executeBtn.setBackgroundColor(Color.GRAY);
 		}
-		
-//		new DoInBackground(getApplicationContext(), ll).execute("http://halapuu.host56.com/pn/xmlgui1.xml");
-		
+				
 	}		
 	
 	// Create a broadcast receiver to get message and show on screen 

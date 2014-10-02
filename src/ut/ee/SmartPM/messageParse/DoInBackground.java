@@ -249,6 +249,8 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 	        	        				mBtn.setText("Done");
 	        	        				mBtn.setBackgroundColor(Color.GRAY);
 	        	        				mBtn.setClickable(false);
+	        	        				if(((LinearLayout) mLl).getChildCount() > 0) 
+	        	        				    ((LinearLayout) mLl).removeAllViews(); 
 	        	        			}
 	        					}
 	        				  })
