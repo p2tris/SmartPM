@@ -35,21 +35,24 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class DoInBackground extends AsyncTask<String, Void, Void> {
 
     Context mContext;
     LinearLayout mLl;
     Button mBtn;
+    TextView mLblMessage;
     
     String tag = "DynamicFormXML";
 	XmlGuiForm theForm;
 
-    public DoInBackground(Context context, LinearLayout ll, Button btn) {
+    public DoInBackground(Context context, LinearLayout ll, Button btn, TextView lblMessage) {
 
         this.mContext = context;
         this.mLl = ll;
         this.mBtn = btn;
+        this.mLblMessage = lblMessage;
     }
     
     @Override
@@ -139,6 +142,7 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 				tempField.setName(attr.getNamedItem("name").getNodeValue());
 				tempField.setLabel(attr.getNamedItem("label").getNodeValue());
 				tempField.setType(attr.getNamedItem("type").getNodeValue());
+				tempField.setLib(attr.getNamedItem("autoLib").getNodeValue());
 				if (attr.getNamedItem("required").getNodeValue().equals("Y"))
 					tempField.setRequired(true);
 				else
@@ -172,7 +176,7 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 	        		mLl.addView((View) theForm.fields.elementAt(i).obj);
 	        	}
 	        	else if (theForm.fields.elementAt(i).getType().equals("auto")) {
-	        		theForm.fields.elementAt(i).obj = new XmlGuiAutomatic(mContext,(theForm.fields.elementAt(i).isRequired() ? "*" : "") + theForm.fields.elementAt(i).getLabel(),"");
+	        		theForm.fields.elementAt(i).obj = new XmlGuiAutomatic(mContext,(theForm.fields.elementAt(i).isRequired() ? "*" : "") + theForm.fields.elementAt(i).getLabel(),theForm.fields.elementAt(i).getLib());
 	        		mLl.addView((View) theForm.fields.elementAt(i).obj);
 	        	}
 	        	else if (theForm.fields.elementAt(i).getType().equals("choice")) {
@@ -200,14 +204,6 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 	        			
 	        	        mLl.setVisibility(View.VISIBLE);
 
-	        			
-	        			// At the moment we start loading libraries etc. when task is started (because in case of interruption certain lib might
-	        			// not be needed anymore).
-	        			Log.d("APP", "before libloader");
-	        			
-	        			LibLoader libLoader = new LibLoader(mContext.getApplicationContext());  
-	        			
-	        			Log.d("APP", "after libloader");
 	        			
 	        			// TODO: Notify server about task being started
 	        			
@@ -246,6 +242,7 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 	        	        				mBtn.setClickable(false);
 	        	        				if(((LinearLayout) mLl).getChildCount() > 0) 
 	        	        				    ((LinearLayout) mLl).removeAllViews(); 
+	        	        				mLblMessage.setText("No tasks");
 	        	        			}
 	        					}
 	        				  })

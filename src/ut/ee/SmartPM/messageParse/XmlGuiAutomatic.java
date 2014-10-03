@@ -1,20 +1,34 @@
 package ut.ee.SmartPM.messageParse;
 
+import ut.ee.SmartPM.lib.LibLoader;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class XmlGuiAutomatic extends LinearLayout {
 	TextView label;
 	TextView autoLabel;
+	Context mContext;
 	
-	public XmlGuiAutomatic(Context context,String labelText,String initialText) {
+	public XmlGuiAutomatic(Context context,String labelText, String lib) {
 		super(context);
+		
+		this.mContext = context;
 		label = new TextView(context);
 		label.setText(labelText);
 		autoLabel = new TextView(context);
-		autoLabel.setText(initialText);
+		autoLabel.setText("");
+		
+		
+		
+		Log.d("APP", "before libloader");
+		
+		LibLoader libLoader = new LibLoader(mContext.getApplicationContext(), lib);  
+		
+		Log.d("APP", "after libloader");
+		
 		this.addView(label);
 		this.addView(autoLabel);
 	}

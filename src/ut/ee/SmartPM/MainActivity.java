@@ -143,12 +143,12 @@ public class MainActivity extends Activity {
 			aController.acquireWakeLock(getApplicationContext());
 			
 			// Display message on the screen
-			lblMessage.setText(newMessage + "\n");		
+			lblMessage.setText("New TASK:\n" + newMessage);		
 			
 			Toast.makeText(getApplicationContext(), "Got Message: " + newMessage, Toast.LENGTH_LONG).show();
 			
 			LinearLayout ll = (LinearLayout) findViewById(R.id.ll);
-			new DoInBackground(getApplicationContext(), ll, executeBtn).execute("http://halapuu.host56.com/pn/xmlgui1.xml");
+			new DoInBackground(getApplicationContext(), ll, executeBtn, lblMessage).execute(newMessage);
 									
 			// Releasing wake lock
 			aController.releaseWakeLock();

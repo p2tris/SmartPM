@@ -66,7 +66,7 @@ public class XmlGuiFormField {
 		sb.append("Field Type: " + this.type + "\n");
 		sb.append("Required? : " + this.required + "\n");
 		sb.append("Options : " + this.options + "\n");
-		sb.append("Lib :" + this.autoLib + "\n");
+		sb.append("Lib : " + this.autoLib + "\n");
 		sb.append("Value : " + (String) this.getData() + "\n");
 		
 		return sb.toString();
@@ -97,8 +97,8 @@ public class XmlGuiFormField {
 			}
 		} else if (type.equals("auto")) {
 			if (obj != null) {
-				XmlGuiAutomatic bo = (XmlGuiAutomatic) obj;
-				return bo.getValue();
+				XmlGuiAutomatic au = (XmlGuiAutomatic) obj;
+				return au.getValue();
 			}
 		}
 		return null;
