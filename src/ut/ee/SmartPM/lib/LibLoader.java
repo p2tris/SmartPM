@@ -5,23 +5,29 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
 import org.apache.http.util.ByteArrayBuffer;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 import dalvik.system.DexClassLoader;
 
 public class LibLoader {
 	Context mContext;
+	String fileName;
+	String libPath;
 	
 	public LibLoader(Context context, String lib) {
 		this.mContext = context;
 		Log.d("LIB", "In libloader");
-		String fileName = lib.substring( lib.lastIndexOf('/')+1, lib.length() );
+		this.fileName = lib.substring( lib.lastIndexOf('/')+1, lib.length() );
+		this.libPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/SmartPM/";
 		
 		// Check if folder exists
         File folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/SmartPM");
@@ -32,8 +38,6 @@ public class LibLoader {
         
         try {
         	
-        	// take files from following path
-        	final String libPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/SmartPM/";
             final File tmpDir = mContext.getDir("dex", 0);
             
             File myFile = new File(libPath + fileName);
@@ -54,87 +58,98 @@ public class LibLoader {
                 obj.getType();
                 Log.d("LIB", obj.getType());
             } else {
-            	try {
-                    
-                    File dir = new File (libPath);
-                    
-                    URL url = new URL(lib); //you can write here any link
-                    File file = new File(dir, fileName);
+            	new DownloadLibfromInternet().execute(lib);
 
-                    long startTime = System.currentTimeMillis();
-                    Log.d("DownloadManager", "download begining");
-                    Log.d("DownloadManager", "download url:" + url);
-                    Log.d("DownloadManager", "downloaded file name:" + fileName);
-
-                    /* Open a connection to that URL. */
-                    URLConnection ucon = url.openConnection();
-
-                    /*
-                     * Define InputStreams to read from the URLConnection.
-                     */
-                    InputStream is = ucon.getInputStream();
-                    BufferedInputStream bis = new BufferedInputStream(is);
-
-                    /*
-                     * Read bytes to the Buffer until there is nothing more to read(-1).
-                     */
-                    ByteArrayBuffer baf = new ByteArrayBuffer(5000);
-                    int current = 0;
-                    while ((current = bis.read()) != -1) {
-                       baf.append((byte) current);
-                    }
-
-
-                    /* Convert the Bytes read to a String. */
-                    FileOutputStream fos = new FileOutputStream(file);
-                    fos.write(baf.toByteArray());
-                    fos.flush();
-                    fos.close();
-                    Log.d("DownloadManager", "download ready in" + ((System.currentTimeMillis() - startTime) / 1000) + " sec");
-	                if (((System.currentTimeMillis() - startTime) / 1000) == 0){
-	                	Log.d("DownloadManager", "Download READY");
-	                }
-            } catch (IOException e) {
-                Log.d("DownloadManager", "Error: " + e);
-            }
             }
             
-//            // Go through each apk and load it
-//            // TODO: load only apk's that are required for the task
-//            File dir = new File(libPath);
-//            File[] filelist = dir.listFiles();
-//            for (File f : filelist)
-//            {
-//            	// TODO: To get class name dynamically from jar we would need something like that...
-//            	// http://stackoverflow.com/questions/11453614/how-can-i-load-a-jar-file-dynamically-in-an-android-application-4-0-3
-//            	
-//            	if (f.getName().endsWith(".apk")) {
-//            		
-//            		Log.d("PlugIn file name", f.getName());
-//
-//	            		
-//	            		
-//	            		final DexClassLoader classloader = new DexClassLoader(libPath + f.getName(), tmpDir.getAbsolutePath(), null, this.getClass().getClassLoader());
-//	                    final Class<Object> classToLoad = (Class<Object>) classloader.loadClass("ut.ee.SmartPM.lib.MyClass");
-//	                    
-//	                    LibInterface obj = (LibInterface) classToLoad.newInstance();
-//	                    
-//	                    // execute the library/plug-in
-//	                   
-//	                    Log.d("LIB", "before lib");
-//	                    obj.useMyLib(context);
-//	                    Log.d("LIB", obj.useMyLib(context));
-//	                    obj.getName();
-//	                    Log.d("LIB", obj.getName());
-//	                    obj.getType();
-//	                    Log.d("LIB", obj.getType());
-//	                    
-//	
-//            	}
-//            	
-//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 	}
+	
+	// Async Task Class
+    class DownloadLibfromInternet extends AsyncTask<String, String, String> {
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        // Download Music File from Internet
+        @Override
+        protected String doInBackground(String... f_url) {
+            int count;
+            try {
+                URL url = new URL(f_url[0]);
+                URLConnection conection = url.openConnection();
+                conection.connect();
+                // Get Music file length
+                int lenghtOfFile = conection.getContentLength();
+                // input stream to read file - with 8k buffer
+                InputStream input = new BufferedInputStream(url.openStream(),10*1024);
+                // Output stream to write file in SD card
+                OutputStream output = new FileOutputStream(libPath+fileName);
+                byte data[] = new byte[1024];
+                long total = 0;
+                while ((count = input.read(data)) != -1) {
+                    total += count;
+                    // Publish the progress which triggers onProgressUpdate method
+                    publishProgress("" + (int) ((total * 100) / lenghtOfFile));
+
+                    // Write data to file
+                    output.write(data, 0, count);
+                }
+                // Flush output
+                output.flush();
+                // Close streams
+                output.close();
+                input.close();
+            } catch (Exception e) {
+                Log.e("Error: ", e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String file_url) {
+        	final File tmpDir = mContext.getDir("dex", 0);
+            
+            File myFile = new File(libPath + fileName);
+            if(myFile.exists()){
+            	Log.d("LIB","Starting to load downloaded file class");
+            	
+				try {
+					final DexClassLoader classloader = new DexClassLoader(libPath + fileName, tmpDir.getAbsolutePath(), null, this.getClass().getClassLoader());
+	                final Class<Object> classToLoad = (Class<Object>) classloader.loadClass("ut.ee.SmartPM.lib.MyClass");
+	                
+	                LibInterface obj = (LibInterface) classToLoad.newInstance();
+	                
+	                // execute the library/plug-in
+	               
+	                Log.d("LIB", "before lib");
+	                obj.useMyLib(mContext);
+	                Log.d("LIB", obj.useMyLib(mContext));
+	                obj.getName();
+	                Log.d("LIB", obj.getName());
+	                obj.getType();
+	                Log.d("LIB", obj.getType());
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InstantiationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                
+               
+        } else {
+        	Log.d("LIB FAIL", "Failed loading the lib after downloading the lib");
+        }
+    }
+    
+    }
 }
