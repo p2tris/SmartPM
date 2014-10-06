@@ -15,6 +15,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 import dalvik.system.DexClassLoader;
 
@@ -22,9 +23,11 @@ public class LibLoader {
 	Context mContext;
 	String fileName;
 	String libPath;
+	TextView mAutoLabel;
 	
-	public LibLoader(Context context, String lib) {
+	public LibLoader(Context context, String lib, TextView autoLabel) {
 		this.mContext = context;
+		this.mAutoLabel = autoLabel;
 		Log.d("LIB", "In libloader");
 		this.fileName = lib.substring( lib.lastIndexOf('/')+1, lib.length() );
 		this.libPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/SmartPM/";
@@ -50,13 +53,13 @@ public class LibLoader {
                 
                 // execute the library/plug-in
                
-                Log.d("LIB", "before lib");
-                obj.useMyLib(mContext);
-                Log.d("LIB", obj.useMyLib(mContext));
+                Log.d("LIBloader", "before lib");
+                obj.useMyLib(mContext, mAutoLabel);
+                Log.d("LIBloader", obj.useMyLib(mContext, mAutoLabel));
                 obj.getName();
-                Log.d("LIB", obj.getName());
+                Log.d("LIBloader", obj.getName());
                 obj.getType();
-                Log.d("LIB", obj.getType());
+                Log.d("LIBloader", obj.getType());
             } else {
             	new DownloadLibfromInternet().execute(lib);
 
@@ -128,8 +131,8 @@ public class LibLoader {
 	                // execute the library/plug-in
 	               
 	                Log.d("LIB", "before lib");
-	                obj.useMyLib(mContext);
-	                Log.d("LIB", obj.useMyLib(mContext));
+	                obj.useMyLib(mContext, mAutoLabel);
+	                Log.d("LIB", obj.useMyLib(mContext, mAutoLabel));
 	                obj.getName();
 	                Log.d("LIB", obj.getName());
 	                obj.getType();

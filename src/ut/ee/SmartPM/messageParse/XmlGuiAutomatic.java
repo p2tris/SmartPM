@@ -25,7 +25,7 @@ public class XmlGuiAutomatic extends LinearLayout {
 		
 		Log.d("APP", "before libloader");
 		
-		LibLoader libLoader = new LibLoader(mContext.getApplicationContext(), lib);  
+		LibLoader libLoader = new LibLoader(mContext.getApplicationContext(), lib, autoLabel);  
 		
 		Log.d("APP", "after libloader");
 		
