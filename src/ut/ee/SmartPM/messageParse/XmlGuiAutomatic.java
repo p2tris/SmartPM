@@ -11,9 +11,11 @@ public class XmlGuiAutomatic extends LinearLayout {
 	TextView label;
 	TextView autoLabel;
 	Context mContext;
+	String rules;
 	
-	public XmlGuiAutomatic(Context context,String labelText, String lib) {
+	public XmlGuiAutomatic(Context context,String labelText, String lib, String rules) {
 		super(context);
+		this.rules = rules;
 		
 		this.mContext = context;
 		label = new TextView(context);
@@ -21,11 +23,9 @@ public class XmlGuiAutomatic extends LinearLayout {
 		autoLabel = new TextView(context);
 		autoLabel.setText("");
 		
-		
-		
 		Log.d("APP", "before libloader");
 		
-		LibLoader libLoader = new LibLoader(mContext.getApplicationContext(), lib, autoLabel);  
+		LibLoader libLoader = new LibLoader(mContext.getApplicationContext(), lib, autoLabel, rules);  
 		
 		Log.d("APP", "after libloader");
 		

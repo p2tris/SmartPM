@@ -25,7 +25,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import ut.ee.SmartPM.lib.LibLoader;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -143,6 +142,7 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 				tempField.setLabel(attr.getNamedItem("label").getNodeValue());
 				tempField.setType(attr.getNamedItem("type").getNodeValue());
 				tempField.setLib(attr.getNamedItem("autoLib").getNodeValue());
+				tempField.setRules(attr.getNamedItem("rules").getNodeValue());
 				if (attr.getNamedItem("required").getNodeValue().equals("Y"))
 					tempField.setRequired(true);
 				else
@@ -176,7 +176,7 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 	        		mLl.addView((View) theForm.fields.elementAt(i).obj);
 	        	}
 	        	else if (theForm.fields.elementAt(i).getType().equals("auto")) {
-	        		theForm.fields.elementAt(i).obj = new XmlGuiAutomatic(mContext,(theForm.fields.elementAt(i).isRequired() ? "*" : "") + theForm.fields.elementAt(i).getLabel(),theForm.fields.elementAt(i).getLib());
+	        		theForm.fields.elementAt(i).obj = new XmlGuiAutomatic(mContext,(theForm.fields.elementAt(i).isRequired() ? "*" : "") + theForm.fields.elementAt(i).getLabel(),theForm.fields.elementAt(i).getLib(), theForm.fields.elementAt(i).getRules());
 	        		mLl.addView((View) theForm.fields.elementAt(i).obj);
 	        	}
 	        	else if (theForm.fields.elementAt(i).getType().equals("choice")) {

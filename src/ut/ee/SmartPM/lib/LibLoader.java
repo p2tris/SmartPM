@@ -24,13 +24,15 @@ public class LibLoader {
 	String fileName;
 	String libPath;
 	TextView mAutoLabel;
+	String rules;
 	
-	public LibLoader(Context context, String lib, TextView autoLabel) {
+	public LibLoader(Context context, String lib, TextView autoLabel, String rules) {
 		this.mContext = context;
 		this.mAutoLabel = autoLabel;
 		Log.d("LIB", "In libloader");
 		this.fileName = lib.substring( lib.lastIndexOf('/')+1, lib.length() );
 		this.libPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/SmartPM/";
+		this.rules = rules;
 		
 		// Check if folder exists
         File folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/SmartPM");
@@ -54,8 +56,8 @@ public class LibLoader {
                 // execute the library/plug-in
                
                 Log.d("LIBloader", "before lib");
-                obj.useMyLib(mContext, mAutoLabel);
-                Log.d("LIBloader", obj.useMyLib(mContext, mAutoLabel));
+                obj.useMyLib(mContext, mAutoLabel, rules);
+                Log.d("LIBloader", obj.useMyLib(mContext, mAutoLabel, rules));
                 obj.getName();
                 Log.d("LIBloader", obj.getName());
                 obj.getType();
@@ -131,8 +133,8 @@ public class LibLoader {
 	                // execute the library/plug-in
 	               
 	                Log.d("LIB", "before lib");
-	                obj.useMyLib(mContext, mAutoLabel);
-	                Log.d("LIB", obj.useMyLib(mContext, mAutoLabel));
+	                obj.useMyLib(mContext, mAutoLabel, rules);
+	                Log.d("LIB", obj.useMyLib(mContext, mAutoLabel, rules));
 	                obj.getName();
 	                Log.d("LIB", obj.getName());
 	                obj.getType();

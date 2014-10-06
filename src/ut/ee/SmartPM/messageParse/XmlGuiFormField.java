@@ -6,9 +6,6 @@
  */
 package ut.ee.SmartPM.messageParse;
 
-
-
-
 // class to handle each individual form
 public class XmlGuiFormField {
 	String name;
@@ -17,6 +14,7 @@ public class XmlGuiFormField {
 	boolean required;
 	String options;
 	String autoLib;
+	String rules;
 	Object obj;			// holds the ui implementation , i.e. the EditText for example
 	
 	
@@ -57,6 +55,12 @@ public class XmlGuiFormField {
 	public void setLib(String autoLib) {
 		this.autoLib = autoLib;
 	}
+	public String getRules(){
+		return rules;
+	}
+	public void setRules(String rules){
+		this.rules = rules;
+	}
 	
 	public String toString()
 	{
@@ -67,6 +71,7 @@ public class XmlGuiFormField {
 		sb.append("Required? : " + this.required + "\n");
 		sb.append("Options : " + this.options + "\n");
 		sb.append("Lib : " + this.autoLib + "\n");
+		sb.append("Rules : " + this.rules + "\n");
 		sb.append("Value : " + (String) this.getData() + "\n");
 		
 		return sb.toString();
