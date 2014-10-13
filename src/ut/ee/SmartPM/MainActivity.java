@@ -1,23 +1,20 @@
 package ut.ee.SmartPM;
 
-import ut.ee.SmartPM.lib.LibLoader;
+import java.util.HashMap;
+import java.util.Map;
+
 import ut.ee.SmartPM.messageParse.DoInBackground;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -138,17 +135,30 @@ public class MainActivity extends Activity {
 		public void onReceive(Context context, Intent intent) {
 			
 			String newMessage = intent.getExtras().getString(Config.EXTRA_MESSAGE);
+			Map<String, String> messageMap = new HashMap<String, String>();
+			// Splits the string and makes it to object that we can work with 
+		    for(String loc : newMessage.split(";")){
+		    	String[] elem = loc.split("\\|");
+		    	messageMap.put(elem[0], elem[1]);
+		    }
 						
 			// Waking up mobile if it is sleeping
 			aController.acquireWakeLock(getApplicationContext());
-			
-			// Display message on the screen
-			lblMessage.setText("New TASK:\n" + newMessage);		
-			
+			if(messageMap.containsKey("taskName")){
+				// Display message on the screen
+				lblMessage.setText("New TASK:\n" + messageMap.get("taskName"));
+			} else {
+				// Display message on the screen
+				lblMessage.setText("New TASK!");
+			}
 			Toast.makeText(getApplicationContext(), "Got Message: " + newMessage, Toast.LENGTH_LONG).show();
 			
-			LinearLayout ll = (LinearLayout) findViewById(R.id.ll);
-			new DoInBackground(getApplicationContext(), ll, executeBtn, lblMessage).execute(newMessage);
+			if(messageMap.containsKey("URL")){
+				LinearLayout ll = (LinearLayout) findViewById(R.id.ll);
+				new DoInBackground(getApplicationContext(), ll, executeBtn, lblMessage).execute(messageMap.get("URL"));
+			} else {
+				lblMessage.setText("No task URL");
+			}
 									
 			// Releasing wake lock
 			aController.releaseWakeLock();

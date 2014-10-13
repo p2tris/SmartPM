@@ -163,33 +163,6 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 		try
 		{			
 	        
-	        // walk thru our form elements and dynamically create them, leveraging our mini library of tools.
-	        int i;
-	        for (i=0;i<theForm.fields.size();i++) {
-	        	if (theForm.fields.elementAt(i).getType().equals("text")) {
-	        		theForm.fields.elementAt(i).obj = new XmlGuiEditBox(mContext,(theForm.fields.elementAt(i).isRequired() ? "*" : "") + theForm.fields.elementAt(i).getLabel(),"");
-	        		mLl.addView((View) theForm.fields.elementAt(i).obj);
-	        	}
-	        	else if (theForm.fields.elementAt(i).getType().equals("numeric")) {
-	        		theForm.fields.elementAt(i).obj = new XmlGuiEditBox(mContext,(theForm.fields.elementAt(i).isRequired() ? "*" : "") + theForm.fields.elementAt(i).getLabel(),"");
-	        		((XmlGuiEditBox)theForm.fields.elementAt(i).obj).makeNumeric();
-	        		mLl.addView((View) theForm.fields.elementAt(i).obj);
-	        	}
-	        	else if (theForm.fields.elementAt(i).getType().equals("auto")) {
-	        		theForm.fields.elementAt(i).obj = new XmlGuiAutomatic(mContext,(theForm.fields.elementAt(i).isRequired() ? "*" : "") + theForm.fields.elementAt(i).getLabel(),theForm.fields.elementAt(i).getLib(), theForm.fields.elementAt(i).getRules());
-	        		mLl.addView((View) theForm.fields.elementAt(i).obj);
-	        	}
-	        	else if (theForm.fields.elementAt(i).getType().equals("choice")) {
-	        		theForm.fields.elementAt(i).obj = new XmlGuiPickOne(mContext,(theForm.fields.elementAt(i).isRequired() ? "*" : "") + theForm.fields.elementAt(i).getLabel(),theForm.fields.elementAt(i).getOptions());
-	        		mLl.addView((View) theForm.fields.elementAt(i).obj);
-	        	}
-	        	else if (theForm.fields.elementAt(i).getType().equals("boolean")) {
-	        		theForm.fields.elementAt(i).obj = new XmlGuiBoolean(mContext,(theForm.fields.elementAt(i).isRequired() ? "*" : "") + theForm.fields.elementAt(i).getLabel());
-	        		mLl.addView((View) theForm.fields.elementAt(i).obj);
-	        	}
-	        }
-	        
-	        
 	        mBtn.setText("Start");
 	        mBtn.setBackgroundColor(Color.GREEN);
 	        mBtn.setClickable(true);
@@ -198,13 +171,40 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 	        	public void onClick(View v) {
 	        		// check if this form is Valid
 	        		if(mBtn.getText() == "Start"){
+	        			
+	        			mLl.setVisibility(View.VISIBLE);
+	        			
+	        			// walk thru our form elements and dynamically create them, leveraging our mini library of tools.
+	        	        int i;
+	        	        for (i=0;i<theForm.fields.size();i++) {
+	        	        	if (theForm.fields.elementAt(i).getType().equals("text")) {
+	        	        		theForm.fields.elementAt(i).obj = new XmlGuiEditBox(mContext,(theForm.fields.elementAt(i).isRequired() ? "*" : "") + theForm.fields.elementAt(i).getLabel(),"");
+	        	        		mLl.addView((View) theForm.fields.elementAt(i).obj);
+	        	        	}
+	        	        	else if (theForm.fields.elementAt(i).getType().equals("numeric")) {
+	        	        		theForm.fields.elementAt(i).obj = new XmlGuiEditBox(mContext,(theForm.fields.elementAt(i).isRequired() ? "*" : "") + theForm.fields.elementAt(i).getLabel(),"");
+	        	        		((XmlGuiEditBox)theForm.fields.elementAt(i).obj).makeNumeric();
+	        	        		mLl.addView((View) theForm.fields.elementAt(i).obj);
+	        	        	}
+	        	        	else if (theForm.fields.elementAt(i).getType().equals("auto")) {
+	        	        		theForm.fields.elementAt(i).obj = new XmlGuiAutomatic(mContext,(theForm.fields.elementAt(i).isRequired() ? "*" : "") + theForm.fields.elementAt(i).getLabel(),theForm.fields.elementAt(i).getLib(), theForm.fields.elementAt(i).getRules());
+	        	        		mLl.addView((View) theForm.fields.elementAt(i).obj);
+	        	        	}
+	        	        	else if (theForm.fields.elementAt(i).getType().equals("choice")) {
+	        	        		theForm.fields.elementAt(i).obj = new XmlGuiPickOne(mContext,(theForm.fields.elementAt(i).isRequired() ? "*" : "") + theForm.fields.elementAt(i).getLabel(),theForm.fields.elementAt(i).getOptions());
+	        	        		mLl.addView((View) theForm.fields.elementAt(i).obj);
+	        	        	}
+	        	        	else if (theForm.fields.elementAt(i).getType().equals("boolean")) {
+	        	        		theForm.fields.elementAt(i).obj = new XmlGuiBoolean(mContext,(theForm.fields.elementAt(i).isRequired() ? "*" : "") + theForm.fields.elementAt(i).getLabel());
+	        	        		mLl.addView((View) theForm.fields.elementAt(i).obj);
+	        	        	}
+	        	        }
+	        			
+	        			
 	        			mBtn.setText("Stop");
 	        			mBtn.setBackgroundColor(Color.RED);
 	        			mBtn.setClickable(true);
-	        			
-	        	        mLl.setVisibility(View.VISIBLE);
-
-	        			
+	        				        			
 	        			// TODO: Notify server about task being started
 	        			
 	        		} else if (mBtn.getText() == "Stop") {
