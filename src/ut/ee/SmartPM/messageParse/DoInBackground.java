@@ -240,6 +240,7 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 	        	        				mBtn.setText("Done");
 	        	        				mBtn.setBackgroundColor(Color.GRAY);
 	        	        				mBtn.setClickable(false);
+	        	        				mBtn.setVisibility(View.INVISIBLE);
 	        	        				if(((LinearLayout) mLl).getChildCount() > 0) 
 	        	        				    ((LinearLayout) mLl).removeAllViews(); 
 	        	        				mLblMessage.setText("No tasks");

@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -123,6 +124,7 @@ public class MainActivity extends Activity {
 		if (lblMessage.getText() == "") {
 			lblMessage.setText("No tasks!");
 			executeBtn.setClickable(false);
+			executeBtn.setVisibility(View.INVISIBLE);
 			executeBtn.setBackgroundColor(Color.GRAY);
 		}
 				
@@ -154,6 +156,7 @@ public class MainActivity extends Activity {
 			Toast.makeText(getApplicationContext(), "Got Message: " + newMessage, Toast.LENGTH_LONG).show();
 			
 			if(messageMap.containsKey("URL")){
+				executeBtn.setVisibility(View.VISIBLE);
 				LinearLayout ll = (LinearLayout) findViewById(R.id.ll);
 				new DoInBackground(getApplicationContext(), ll, executeBtn, lblMessage).execute(messageMap.get("URL"));
 			} else {
