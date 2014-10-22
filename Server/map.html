@@ -1,9 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<script
-src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false">
-</script>
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SmartPM map tool</title>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+
+
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false"> </script>
 
 <script>
 var map;
@@ -92,7 +99,7 @@ function addRow(topLat, topLon, botLat, botLon) {
     var rowCount = table.rows.length;
     var row = table.insertRow(rowCount);
  
-	row.insertCell(0).innerHTML= '<input type="button" value = "Delete" onClick="Javacsript:deleteRow(this,' + topLat + ',' + topLon + ',' + botLat + ',' + botLon + ')" />';
+	row.insertCell(0).innerHTML= '<input type="button" value = "Delete" onClick="Javacsript:deleteRow(this,' + topLat + ',' + topLon + ',' + botLat + ',' + botLon + ')" class="btn btn-danger btn-block" />';
     row.insertCell(1).innerHTML= topLat;
     row.insertCell(2).innerHTML= topLon;
 	row.insertCell(3).innerHTML= botLat;
@@ -161,14 +168,12 @@ function printXml() {
 		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 			var serverResponse = xmlhttp.responseText;
 			document.getElementById("resultXMLURL").innerHTML = serverResponse;
+			window.prompt("Copy to clipboard: Ctrl+C, Enter", serverResponse);
 		}
 	}
 
 	xmlhttp.open("GET", "http://halapuu.host56.com/pn/GPSrulesPost.php?rules=" + encodeURI(xml), true);
-	xmlhttp.send();
-
-	alert(xml);
-	
+	xmlhttp.send();	
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
@@ -176,23 +181,28 @@ google.maps.event.addDomListener(window, 'load', initialize);
 </head>
 
 <body>
-<div id="googleMap" style="width:800px;height:600px;" ></div>
+<div id="googleMap" style="width:800px;height:600px;" class="center-block"></div>
+
+<div id="resultTag">
+	<h1 class="text-center">Result:</h1>
+</div>
+<div id="resultXMLURL" class="text-center bg-info"> 
+	<p>Generated result XML will appear here!</p>
+</div>
+
 <div id="table" >
-<table id="LocList"  border="1" cellpadding="2">
-    <tr>
-        <td>&nbsp;</td>
-        <td><b>TopLat</b></td>
-        <td><b>TopLon</b></td>
-		<td><b>BotLat</b></td>
-        <td><b>BotLon</b></td>
-		<td><b>Name</b></td>
-		<td><b><button onClick="printXml()">CreateXML</button> </b></td>;
+	<table id="LocList" class="table table-striped" border="1" cellpadding="2">
+		<tr>
+			<td>&nbsp;</td>
+			<td><b>TopLat</b></td>
+			<td><b>TopLon</b></td>
+			<td><b>BotLat</b></td>
+			<td><b>BotLon</b></td>
+			<td><b>Name</b></td>
+			<td><b><button onClick="printXml()" class="btn btn-success btn-block">CreateXML</button> </b></td>;
 
-    </tr>
-</table>
+		</tr>
+	</table>
 </div>
-<div id="resultXMLURL"> <H1>Result</H1>
-</div>
-
 </body>
 </html>
