@@ -1,0 +1,5 @@
+<location>
+	<lib name="GPS lib" url="http://halapuu.host56.com/pn/SmartPM_libGPS.apk" />
+	<loc topLat="41.891957" topLon="12.501680" botLat="41.889832" botLon="12.504963" value="School" />
+	<loc topLat="41.886941" topLon="12.502710" botLat="41.884641" botLon="12.509555" value="San Giovanni" />
+</location>
