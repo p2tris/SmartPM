@@ -139,11 +139,13 @@ public class MainActivity extends Activity {
 			String newMessage = intent.getExtras().getString(Config.EXTRA_MESSAGE);
 			Map<String, String> messageMap = new HashMap<String, String>();
 			// Splits the string and makes it to object that we can work with 
-			if(newMessage.contains(";") || newMessage == null){
-				for(String loc : newMessage.split(";")){
-			    	String[] elem = loc.split("\\|");
-			    	messageMap.put(elem[0], elem[1]);
-			    }
+			if(newMessage != null){
+				if(newMessage.contains(";")){
+					for(String loc : newMessage.split(";")){
+				    	String[] elem = loc.split("\\|");
+				    	messageMap.put(elem[0], elem[1]);
+				    }	
+				}
 			}
 		    
 						
