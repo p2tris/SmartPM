@@ -1,3 +1,7 @@
+/**
+ * @author Pätris Halapuu 2014
+ */
+
 package ut.ee.SmartPM;
 
 public interface Config {

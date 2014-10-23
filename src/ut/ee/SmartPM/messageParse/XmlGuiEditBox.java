@@ -4,6 +4,14 @@
  * June 2010
  * Use the code as you wish -- no warranty of fitness, etc, etc.
  */
+
+/**
+ * @author Pätris Halapuu (p2tris@gmail.com)
+ * 
+ * Added customized fields
+ */
+
+
 package ut.ee.SmartPM.messageParse;
 
 import android.content.Context;

@@ -4,6 +4,15 @@
  * June 2010
  * Use the code as you wish -- no warranty of fitness, etc, etc.
  */
+
+/**
+ * @author Pätris Halapuu 2014
+ * 
+ * Added customized fields
+ */
+
+
+
 package ut.ee.SmartPM.messageParse;
 
 // class to handle each individual form

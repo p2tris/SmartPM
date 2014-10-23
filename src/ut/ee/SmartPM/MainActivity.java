@@ -1,3 +1,7 @@
+/**
+ * @author Pätris Halapuu 2014
+ */
+
 package ut.ee.SmartPM;
 
 import java.util.HashMap;
@@ -209,16 +213,16 @@ public class MainActivity extends Activity {
     @Override  
     public boolean onOptionsItemSelected(MenuItem item) {  
         switch (item.getItemId()) {  
+        	//log out selected
             case R.id.item1:  
-              Toast.makeText(getApplicationContext(),"Item 1 Selected",Toast.LENGTH_LONG).show();  
             return true;     
-  
+            
+            //map selected
             case R.id.item2:  
-                Toast.makeText(getApplicationContext(),"Item 2 Selected",Toast.LENGTH_LONG).show();  
               return true;     
               
+            // history selected
             case R.id.item3:  
-                Toast.makeText(getApplicationContext(),"Item 3 Selected",Toast.LENGTH_LONG).show();  
               return true;     
   
               default:  
