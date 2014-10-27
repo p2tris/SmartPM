@@ -73,6 +73,10 @@ function placeMarker(location) {
 				var name = prompt("Enter default name value", "Loc");
 				var rowstep = (fstLat - sndLat) / rownr;
 				var colstep = (sndLon - fstLon) / colnr;
+				
+				var marker = markers[fstLat + '_' + fstLon]; // find marker
+			    removeMarker(marker, fstLat + '_' + fstLon); // remove it
+			    
 				for (var i=0; i<rownr; i++){
 					for (var j=0; j<colnr; j++){
 						var loclattop = fstLat - (rowstep * i);
