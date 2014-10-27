@@ -2,6 +2,9 @@ var map;
 var myCenter=new google.maps.LatLng(41.89092091793598,12.503621578216553);
 var markers = {};
 var polys = {};
+var grid = false;
+var rownr = 1;
+var colnr = 1;
 
 function initialize()
 {
@@ -31,36 +34,92 @@ function placeMarker(location) {
 		if(fstLat > location.lat() && fstLon < location.lng()){
 			sndLat = location.lat();
 			sndLon = location.lng();
+			gridCheckBoxStatus();
 			
-			var marker = new google.maps.Marker({
-				position: location,
-				map: map,
-			});
-			
-			markers[sndLat + '_' + sndLon] = marker; // cache marker in markers object
-			
-			var squareCoords = [
-				new google.maps.LatLng(fstLat, fstLon),
-				new google.maps.LatLng(sndLat, fstLon),
-				new google.maps.LatLng(sndLat, sndLon),
-				new google.maps.LatLng(fstLat, sndLon)
-			];
-			
-			// Construct the polygon.
-			squareElem = new google.maps.Polygon({
-				paths: squareCoords,
-				strokeColor: '#FF0000',
-				strokeOpacity: 0.8,
-				strokeWeight: 3,
-				fillColor: '#FF0000',
-				fillOpacity: 0.35
-			});
-			
-			polys[fstLat + '_' + fstLon] = squareElem;
+			if (!grid) {
+				
+				var marker = new google.maps.Marker({
+					position: location,
+					map: map,
+				});
+				
+				markers[sndLat + '_' + sndLon] = marker; // cache marker in markers object
+				
+				var squareCoords = [
+					new google.maps.LatLng(fstLat, fstLon),
+					new google.maps.LatLng(sndLat, fstLon),
+					new google.maps.LatLng(sndLat, sndLon),
+					new google.maps.LatLng(fstLat, sndLon)
+				];
+				
+				// Construct the polygon.
+				squareElem = new google.maps.Polygon({
+					paths: squareCoords,
+					strokeColor: '#FF0000',
+					strokeOpacity: 0.8,
+					strokeWeight: 3,
+					fillColor: '#FF0000',
+					fillOpacity: 0.35
+				});
+				
+				polys[fstLat + '_' + fstLon] = squareElem;
 
-			squareElem.setMap(map);
+				squareElem.setMap(map);
+				
+				addRow(fstLat, fstLon, sndLat, sndLon, "Location name");
+			} else {
+				colnr = prompt("Enter number of columns", 1);
+				rownr = prompt("Enter number of rows", 1);
+				var name = prompt("Enter default name value", "Loc");
+				var rowstep = (fstLat - sndLat) / rownr;
+				var colstep = (sndLon - fstLon) / colnr;
+				for (var i=0; i<rownr; i++){
+					for (var j=0; j<colnr; j++){
+						var loclattop = fstLat - (rowstep * i);
+						var loclontop = fstLon + (colstep * j);
+						var loclatbot = fstLat - (rowstep * (i+1));
+						var loclonbot = fstLon + (colstep * (j+1));
+						
+						var marker = new google.maps.Marker({
+							position: new google.maps.LatLng(loclattop,loclontop),
+							map: map,
+						});
+						
+						markers[loclattop + '_' + loclontop] = marker; // cache marker in markers object
+						
+						var marker2 = new google.maps.Marker({
+							position: new google.maps.LatLng(loclatbot,loclonbot),
+							map: map,
+						});
+						
+						markers[loclatbot + '_' + loclonbot] = marker2; // cache marker in markers object
+						
+						var squareCoords = [
+							new google.maps.LatLng(loclattop, loclontop),
+							new google.maps.LatLng(loclatbot, loclontop),
+							new google.maps.LatLng(loclatbot, loclonbot),
+							new google.maps.LatLng(loclattop, loclonbot)
+						];
+						
+						// Construct the polygon.
+						squareElem = new google.maps.Polygon({
+							paths: squareCoords,
+							strokeColor: '#FF0000',
+							strokeOpacity: 0.8,
+							strokeWeight: 3,
+							fillColor: '#FF0000',
+							fillOpacity: 0.35
+						});
+						
+						polys[loclattop + '_' + loclontop] = squareElem;
+
+						squareElem.setMap(map);
+						
+						addRow(loclattop, loclontop, loclatbot, loclonbot, name+i.toString()+j.toString());
+					}
+				}
+			}
 			
-			addRow(fstLat, fstLon, sndLat, sndLon);
 		} else {
 			alert("Second point must be bottomright point of the box!");
 			points -= 1;
@@ -77,7 +136,7 @@ function placeMarker(location) {
 		markers[fstLat + '_' + fstLon] = marker; // cache marker in markers object
 	}
 }
-function addRow(topLat, topLon, botLat, botLon) {
+function addRow(topLat, topLon, botLat, botLon, name) {
           
     var table = document.getElementById("LocList");
  
@@ -89,7 +148,7 @@ function addRow(topLat, topLon, botLat, botLon) {
     row.insertCell(2).innerHTML= topLon;
 	row.insertCell(3).innerHTML= botLat;
 	row.insertCell(4).innerHTML= botLon;
-	row.insertCell(5).innerHTML= "<div contenteditable>NameThePlace!</div>";
+	row.insertCell(5).innerHTML= "<div contenteditable>"+ name +"</div>";
  
 }
 
@@ -169,6 +228,11 @@ function printXml() {
 
 	xmlhttp.open("GET", "http://halapuu.host56.com/pn/GPSrulesPost.php?rules=" + encodeURI(xml), true);
 	xmlhttp.send();	
+}
+
+function gridCheckBoxStatus()
+{
+  grid = document.getElementById("gridCheckBox").checked;
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
