@@ -2,9 +2,6 @@ var map;
 var myCenter=new google.maps.LatLng(41.89092091793598,12.503621578216553);
 var markers = {};
 var polys = {};
-var grid = false;
-var rownr = 1;
-var colnr = 1;
 
 function initialize()
 {
@@ -28,22 +25,21 @@ var sndLat = 0;
 var sndLon = 0;
 
 function placeMarker(location) {
-
+	
 	points += 1;
 	if(points % 2 == 0) {
 		if(fstLat > location.lat() && fstLon < location.lng()){
 			sndLat = location.lat();
 			sndLon = location.lng();
-			gridCheckBoxStatus();
 			
-			if (!grid) {
+			if (!gridCheckBoxStatus()) {
 				
 				var marker = new google.maps.Marker({
 					position: location,
 					map: map,
 				});
 				
-				markers[sndLat + '_' + sndLon] = marker; // cache marker in markers object
+				markers[sndLat + '_' + sndLon + '_0'] = marker; // cache marker in markers object
 				
 				var squareCoords = [
 					new google.maps.LatLng(fstLat, fstLon),
@@ -62,20 +58,20 @@ function placeMarker(location) {
 					fillOpacity: 0.35
 				});
 				
-				polys[fstLat + '_' + fstLon] = squareElem;
+				polys[fstLat + '_' + fstLon + '_' + sndLat + '_' + sndLon] = squareElem;
 
 				squareElem.setMap(map);
 				
-				addRow(fstLat, fstLon, sndLat, sndLon, "Location name");
+				addRow(fstLat, fstLon, sndLat, sndLon, "Location name", '0');
 			} else {
-				colnr = prompt("Enter number of columns", 1);
-				rownr = prompt("Enter number of rows", 1);
+				var colnr = prompt("Enter number of columns", 1);
+				var rownr = prompt("Enter number of rows", 1);
 				var name = prompt("Enter default name value", "Loc");
 				var rowstep = (fstLat - sndLat) / rownr;
 				var colstep = (sndLon - fstLon) / colnr;
 				
-				var marker = markers[fstLat + '_' + fstLon]; // find marker
-			    removeMarker(marker, fstLat + '_' + fstLon); // remove it
+				var marker = markers[fstLat + '_' + fstLon + '_0']; // find marker
+			    removeMarker(marker, fstLat + '_' + fstLon + '_0'); // remove it
 			    
 				for (var i=0; i<rownr; i++){
 					for (var j=0; j<colnr; j++){
@@ -89,14 +85,15 @@ function placeMarker(location) {
 							map: map,
 						});
 						
-						markers[loclattop + '_' + loclontop] = marker; // cache marker in markers object
+						// i+1 and j+1 because somehow if 0, then first row marks will not get deleted
+						markers[loclattop + '_' + loclontop + '_' + (i+1).toString() + (j+1).toString()] = marker; // cache marker in markers object
 						
 						var marker2 = new google.maps.Marker({
 							position: new google.maps.LatLng(loclatbot,loclonbot),
 							map: map,
 						});
 						
-						markers[loclatbot + '_' + loclonbot] = marker2; // cache marker in markers object
+						markers[loclatbot + '_' + loclonbot + '_' + (i+1).toString() + (j+1).toString()] = marker2; // cache marker in markers object
 						
 						var squareCoords = [
 							new google.maps.LatLng(loclattop, loclontop),
@@ -115,11 +112,11 @@ function placeMarker(location) {
 							fillOpacity: 0.35
 						});
 						
-						polys[loclattop + '_' + loclontop] = squareElem;
+						polys[loclattop + '_' + loclontop + '_' + loclatbot + '_' + loclonbot] = squareElem;
 
 						squareElem.setMap(map);
 						
-						addRow(loclattop, loclontop, loclatbot, loclonbot, name+i.toString()+j.toString());
+						addRow(loclattop, loclontop, loclatbot, loclonbot, name+i.toString()+j.toString(), (i+1).toString() + (j+1).toString());
 					}
 				}
 			}
@@ -137,17 +134,17 @@ function placeMarker(location) {
 		});
 		fstLat = location.lat();
 		fstLon = location.lng();
-		markers[fstLat + '_' + fstLon] = marker; // cache marker in markers object
+		markers[fstLat + '_' + fstLon + '_0'] = marker; // cache marker in markers object
 	}
 }
-function addRow(topLat, topLon, botLat, botLon, name) {
+function addRow(topLat, topLon, botLat, botLon, name, ids) {
           
     var table = document.getElementById("LocList");
  
     var rowCount = table.rows.length;
     var row = table.insertRow(rowCount);
  
-	row.insertCell(0).innerHTML= '<input type="button" value = "Delete" onClick="Javacsript:deleteRow(this,' + topLat + ',' + topLon + ',' + botLat + ',' + botLon + ')" class="btn btn-danger btn-block" />';
+	row.insertCell(0).innerHTML= '<input type="button" value = "Delete" onClick="Javacsript:deleteRow(this,' + topLat + ',' + topLon + ',' + botLat + ',' + botLon + ',' + ids + ')" class="btn btn-danger btn-block" />';
     row.insertCell(1).innerHTML= topLat;
     row.insertCell(2).innerHTML= topLon;
 	row.insertCell(3).innerHTML= botLat;
@@ -156,19 +153,20 @@ function addRow(topLat, topLon, botLat, botLon, name) {
  
 }
 
-function deleteRow(obj, lat1, lon1, lat2, lon2) {
+function deleteRow(obj, lat1, lon1, lat2, lon2, ids) {
       
     var index = obj.parentNode.parentNode.rowIndex;
     var table = document.getElementById("LocList");
     table.deleteRow(index);
-	var marker1 = markers[lat1 + '_' + lon1]; // find marker
-    removeMarker(marker1, lat1 + '_' + lon1); // remove it
+    
+    var poly = polys[lat1 + '_' + lon1 + '_' + lat2 + '_' + lon2];
+    removePoly(poly, lat2 + '_' + lon2 + '_' + lat2 + '_' + lon2); // remove it
+    
+	var marker1 = markers[lat1 + '_' + lon1 + '_' + ids]; // find marker
+    removeMarker(marker1, lat1 + '_' + lon1 + '_' + ids); // remove it
 	
-	var marker2 = markers[lat2 + '_' + lon2]; // find marker
-    removeMarker(marker2, lat2 + '_' + lon2); // remove it
-	
-	var poly = polys[lat1 + '_' + lon1];
-    removePoly(poly, lat2 + '_' + lon2); // remove it
+	var marker2 = markers[lat2 + '_' + lon2 + '_' + ids]; // find marker
+    removeMarker(marker2, lat2 + '_' + lon2 + '_' + ids); // remove it
 }
 
 function removePoly(poly, polyId){
@@ -236,7 +234,7 @@ function printXml() {
 
 function gridCheckBoxStatus()
 {
-  grid = document.getElementById("gridCheckBox").checked;
+  return document.getElementById("gridCheckBox").checked;
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
