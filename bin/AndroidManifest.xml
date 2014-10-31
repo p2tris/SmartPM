@@ -8,6 +8,8 @@
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
     
+	<uses-permission android:name="android.permission.RECORD_AUDIO" />
+    
     <!-- GCM connects to Internet Services. -->
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -18,9 +20,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <!-- Creates a custom permission so only this app can receive its messages. -->
-    <permission
-        android:name="ut.ee.SmartPM.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
+    <permission android:name="ut.ee.SmartPM.permission.C2D_MESSAGE" android:protectionLevel="signature" />
 
     <uses-permission android:name="ut.ee.SmartPM.permission.C2D_MESSAGE" />
 

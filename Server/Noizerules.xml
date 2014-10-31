@@ -1,0 +1,5 @@
+<noize>
+	<lib name="Noize lib" url="http://halapuu.host56.com/pn/SmartPM_libNoize.apk" />
+	<level low="0.0" high="80.0" value="low" />
+	<level low="80.0" high="194.0" value="high" />
+</noize>
