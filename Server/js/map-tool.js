@@ -217,8 +217,18 @@ function printXml() {
 				}
 		   }
 		}  
+	
+	$.ajax({
+        url: 'http://halapuu.host56.com/pn/GPSrulesPost.php',
+        type: 'POST',
+        data: "rules=" + encodeURI(xml),
+        success: function (data) {
+        	document.getElementById("resultXMLURL").innerHTML = data;
+			window.prompt("Copy to clipboard: Ctrl+C, Enter", data);
+                }
+        });
 		
-	var xmlhttp = new XMLHttpRequest();
+	/*var xmlhttp = new XMLHttpRequest();
 
 	xmlhttp.onreadystatechange = function() {
 		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -229,7 +239,8 @@ function printXml() {
 	}
 
 	xmlhttp.open("GET", "http://halapuu.host56.com/pn/GPSrulesPost.php?rules=" + encodeURI(xml), true);
-	xmlhttp.send();	
+	xmlhttp.send();
+	*/	
 }
 
 function gridCheckBoxStatus()
