@@ -61,7 +61,6 @@ public class LibLoader {
                
                 Log.d("LIBloader", "before lib");
                 obj.useMyLib(mContext, mAutoLabel, rules);
-                Log.d("LIBloader", obj.useMyLib(mContext, mAutoLabel, rules));
                 obj.getName();
                 Log.d("LIBloader", obj.getName());
                 obj.getType();
