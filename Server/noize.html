@@ -10,51 +10,8 @@
 	
 	<script type="text/javascript" src="js/jquery-1.8.3.min.js"> </script>
 	<script type="text/javascript" src="js/jquery-ui-1.9.2.min.js" > </script>
-	
-	<script>
-		var createSlider = function ($slider, values) {
-			$slider.slider({
-				min: 0,
-				max: 194,
-				step: 5,
-				values: values,
-				slide: function(event, ui) {
-					for (var i = 0; i < ui.values.length; ++i) {
-						$("input.sliderValue[data-index=" + i + "]").val(ui.values[i]);
-					}
-				}
-			});        
-		};
+	<script type="text/javascript" src="js/noize-tool.js" > </script>
 
-		$(document).ready(function() {
-			var values = [],
-				$slider = $("#slider");
-			
-			createSlider($slider, values);
-			
-
-			$("input.sliderValue").change(function() {
-				var $this = $(this);
-				$("#slider").slider("values", $this.data("index"), $this.val());
-			});
-			
-			
-			// destroy slider
-			$slider.slider('destroy');
-			
-			
-			// add new value (simplyfied of course)
-			values = [10, 30, 90];
-			
-			// create new slider again with new values
-			createSlider($slider, values);
-			
-			$("input.sliderValue").change(function() {
-				var $this = $(this);
-				$("#slider").slider("values", $this.data("index"), $this.val());
-		});
-	});
-	</script>
 </head>
 
 <body>
@@ -65,15 +22,11 @@
 	<div id="resultTag" class="text-center">
 		<h1 >SmartPM noizeLibrary tool</h1>
 	</div>
-	
 	<div class="barTool">
 		<form>
 			<div id="slider"></div>
 			<br />
-			<div>
-				<input type="text" class="sliderValue" data-index="0" value="10" />
-				<input type="text" class="sliderValue" data-index="1" value="30" />
-				<input type="text" class="sliderValue" data-index="2" value="90" />
+			<div id="sliderElements">
 			</div>
 		</form>
 	</div>
@@ -86,14 +39,17 @@
 		<p>Generated result XML will appear here!</p>
 	</div>
 	<div id="table" >
-		<table id="LocList" class="table table-striped" border="1" cellpadding="2">
+		<table  class="table table-striped" border="1" cellpadding="2">
+			<thead>
 			<tr>
-				<td>&nbsp;</td>
 				<td><b>Low</b></td>
 				<td><b>High</b></td>
 				<td><b>Name</b></td>
 				<td><b><button onClick="printXml()" class="btn btn-success btn-block">CreateXML</button> </b></td>
 			</tr>
+			</thead>
+			<tbody id="volList">
+			</tbody>
 		</table>
 	</div>
 	<br/>
