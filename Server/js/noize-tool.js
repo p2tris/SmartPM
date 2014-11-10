@@ -70,7 +70,7 @@ function printXml() {
 	var arr = new Array();
 	for (var i = 0, row; row = table.rows[i]; i++) {
 		if(row.cells[0].textContent != "Low"){
-			xml += "<level ";
+			xml += "<data_value ";
 			for (var j = 0, col; col = row.cells[j]; j++) {
 				switch(j){
 					case 0:

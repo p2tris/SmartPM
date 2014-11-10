@@ -185,7 +185,7 @@ function printXml() {
 	var arr = new Array();
 	for (var i = 0, row; row = table.rows[i]; i++) {
 		if(row.cells[1].textContent != "TopLat"){
-			xml += "<loc ";
+			xml += "<data_value ";
 			for (var j = 0, col; col = row.cells[j]; j++) {
 				switch(j){
 					case 1:
