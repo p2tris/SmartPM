@@ -6,8 +6,8 @@
 <field name="checked" label="Checked?" type="boolean" required="N" options="" autoLib="" rules=""/>
 <field name="lname" label="Last Name" type="text" required="Y" options="" autoLib="" rules=""/>
 <field name="gender" label="Gender" type="choice" required="Y" options="Male|Female" autoLib="" rules=""/>
-<field name="gps" label="GPS:" type="auto" required="N" options="" autoLib="http://halapuu.host56.com/pn/SmartPM_libGPS.apk" rules="http://halapuu.host56.com/pn/GPSrules1415619148.xml"/>
+<field name="gps" label="GPS:" type="auto" required="N" options="" autoLib="http://halapuu.host56.com/pn/SmartPM_libGPS.apk" rules="http://halapuu.host56.com/pn/GPSrules1415620007.xml"/>
 <field name="age" label="Age on 15 Oct. 2010" type="numeric" required="N" options="" autoLib="" rules=""/>
-<field name="noize" label="Noize level:" type="auto" required="N" options="" autoLib="http://halapuu.host56.com/pn/SmartPM_libNoize.apk" rules="http://halapuu.host56.com/pn/Noizerules1415619270.xml"/>
+<field name="noize" label="Noize level:" type="auto" required="N" options="" autoLib="http://halapuu.host56.com/pn/SmartPM_libNoize.apk" rules="http://halapuu.host56.com/pn/Noizerules1415619837.xml"/>
 </form>
 </xmlgui>
