@@ -131,7 +131,6 @@ public class MainActivity extends Activity {
 			lblMessage.setText("No tasks!");
 			executeBtn.setClickable(false);
 			executeBtn.setVisibility(View.INVISIBLE);
-			executeBtn.setBackgroundColor(Color.GRAY);
 		}
 				
 	}		
@@ -159,7 +158,7 @@ public class MainActivity extends Activity {
 			aController.acquireWakeLock(getApplicationContext());
 			if(messageMap.containsKey("taskName")){
 				// Display message on the screen
-				lblMessage.setText("New TASK:\n" + messageMap.get("taskName"));
+				lblMessage.setText(messageMap.get("taskName"));
 			} else {
 				// Display message on the screen
 				lblMessage.setText("New TASK!");
@@ -169,7 +168,7 @@ public class MainActivity extends Activity {
 			if(messageMap.containsKey("URL")){
 				executeBtn.setVisibility(View.VISIBLE);
 				LinearLayout ll = (LinearLayout) findViewById(R.id.ll);
-				new DoInBackground(getApplicationContext(), ll, executeBtn, lblMessage).execute(messageMap.get("URL"));
+				new DoInBackground(context, ll, executeBtn, lblMessage).execute(messageMap.get("URL"));
 			} else {
 				lblMessage.setText("No task URL");
 			}

@@ -168,7 +168,6 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 		{			
 	        
 	        mBtn.setText("Start");
-	        mBtn.setBackgroundColor(Color.GREEN);
 	        mBtn.setClickable(true);
 	        mLl.setVisibility(View.INVISIBLE);
 	        mBtn.setOnClickListener(new Button.OnClickListener() {
@@ -206,7 +205,6 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 	        			
 	        			
 	        			mBtn.setText("Stop");
-	        			mBtn.setBackgroundColor(Color.RED);
 	        			mBtn.setClickable(true);
 	        				        			
 	        			// TODO: Notify server about task being started
@@ -242,7 +240,6 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 	        		            		return;
 	        	        			}else {
 	        	        				mBtn.setText("Done");
-	        	        				mBtn.setBackgroundColor(Color.GRAY);
 	        	        				mBtn.setClickable(false);
 	        	        				mBtn.setVisibility(View.INVISIBLE);
 	        	        				if(((LinearLayout) mLl).getChildCount() > 0) 
