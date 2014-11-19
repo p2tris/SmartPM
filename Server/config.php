@@ -2,10 +2,10 @@
 /**
  * Database config variables
  */
-define("DB_HOST", "mysql9.000webhost.com");
-define("DB_USER", "a9798364_halapuu");
+define("DB_HOST", "localhost");
+define("DB_USER", "smartpm");
 define("DB_PASSWORD", "OmaEma123");
-define("DB_DATABASE", "a9798364_pn");
+define("DB_DATABASE", "smartpm");
 
 /*
  * Google Cloud Messaging API Key

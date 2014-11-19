@@ -98,7 +98,7 @@ function printXml() {
 		}  
 	
 	$.ajax({
-        url: 'http://halapuu.host56.com/pn/NoizerulesPost.php',
+        url: 'http://smartpm.cloudapp.net/NoizerulesPost.php',
         type: 'POST',
         data: "rules=" + encodeURI(xml),
         success: function (data) {

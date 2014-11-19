@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xmlgui>
 <form id="1" name="SmartPM taskXML" 
-   submitTo="http://halapuu.host56.com/pn/xmlgui1-post.php" >
+   submitTo="http://smartpm.cloudapp.net/xmlgui1-post.php" >
 <field name="fname" label="First Name" type="text" required="Y" options="" autoLib="" rules=""/>
 <field name="checked" label="Checked?" type="boolean" required="N" options="" autoLib="" rules=""/>
 <field name="lname" label="Last Name" type="text" required="Y" options="" autoLib="" rules=""/>
 <field name="gender" label="Gender" type="choice" required="Y" options="Male|Female" autoLib="" rules=""/>
-<field name="gps" label="GPS:" type="auto" required="N" options="" autoLib="http://halapuu.host56.com/pn/SmartPM_libGPS.apk" rules="http://halapuu.host56.com/pn/GPSrules1415620007.xml"/>
+<field name="gps" label="GPS:" type="auto" required="N" options="" autoLib="http://smartpm.cloudapp.net/SmartPM_libGPS.apk" rules="http://smartpm.cloudapp.net/GPSrules1415620007.xml"/>
 <field name="age" label="Age on 15 Oct. 2010" type="numeric" required="N" options="" autoLib="" rules=""/>
-<field name="noize" label="Noize level:" type="auto" required="N" options="" autoLib="http://halapuu.host56.com/pn/SmartPM_libNoize.apk" rules="http://halapuu.host56.com/pn/Noizerules1415619837.xml"/>
+<field name="noize" label="Noize level:" type="auto" required="N" options="" autoLib="http://smartpm.cloudapp.net/SmartPM_libNoize.apk" rules="http://smartpm.cloudapp.net/Noizerules1415619837.xml"/>
 </form>
 </xmlgui>

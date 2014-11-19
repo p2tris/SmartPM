@@ -219,7 +219,7 @@ function printXml() {
 		}  
 	
 	$.ajax({
-        url: 'http://halapuu.host56.com/pn/GPSrulesPost.php',
+        url: 'http://smartpm.cloudapp.net/GPSrulesPost.php',
         type: 'POST',
         data: "rules=" + encodeURI(xml),
         success: function (data) {

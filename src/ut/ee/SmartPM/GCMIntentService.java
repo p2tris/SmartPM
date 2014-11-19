@@ -50,6 +50,13 @@ public class GCMIntentService extends GCMBaseIntentService {
         Log.i(TAG, "Device unregistered");
         aController.displayMessageOnScreen(context, getString(R.string.gcm_unregistered));
         aController.unregister(context, registrationId);
+        Intent i = new Intent().setClass(getApplicationContext(), RegisterActivity.class);  
+        i.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);                     
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);  
+
+        // Launch the new activity and add the additional flags to the intent
+        getApplicationContext().startActivity(i);
+        
     }
 
     /**

@@ -13,7 +13,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -214,8 +213,8 @@ public class MainActivity extends Activity {
         switch (item.getItemId()) {  
         	//log out selected
             case R.id.item1:  
-            return true;     
-            
+            	GCMRegistrar.unregister(context);
+            	finish();            
             //map selected
             case R.id.item2:  
               return true;     

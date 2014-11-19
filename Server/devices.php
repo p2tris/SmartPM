@@ -12,7 +12,7 @@
     <head>
         <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script src="js/jquery.1.8.2.min.js"></script>
         <script type="text/javascript">
             $(document).ready(function(){
                

@@ -8,7 +8,7 @@ public interface Config {
 
 	
 	// CONSTANTS
-	static final String YOUR_SERVER_URL =  "http://halapuu.host56.com/pn/register.php";
+	static final String YOUR_SERVER_URL =  "http://smartpm.cloudapp.net/register.php";
 
 	// Google project id
     static final String GOOGLE_SENDER_ID = "64754581420";  // Google project id
