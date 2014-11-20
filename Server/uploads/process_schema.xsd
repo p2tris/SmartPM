@@ -37,10 +37,6 @@
   </xs:restriction>
 </xs:simpleType>
 
-
- 
- 
- 
  <xs:simpleType name="Actor">
   <xs:restriction base="Service">
    <xs:enumeration value="act1"/>
@@ -63,34 +59,18 @@
       <xs:element minOccurs="0" ref="provides"/>
       <xs:element minOccurs="0" ref="requires"/>
    
-   
-   
-   
-   
-   
    <xs:element minOccurs="0" ref="moveStep"/>
    <xs:element minOccurs="0" ref="debrisStep"/>
    <xs:element minOccurs="0" ref="neigh"/>
    <xs:element minOccurs="0" ref="covered"/>
    <xs:element minOccurs="0" ref="batteryRecharging"/>
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
+      
    <xs:element minOccurs="0" ref="at"/>
    <xs:element minOccurs="0" ref="evacuated"/>
    <xs:element minOccurs="0" ref="status"/>
    <xs:element minOccurs="0" ref="photoTaken"/>
    <xs:element minOccurs="0" ref="batteryLevel"/>
    <xs:element minOccurs="0" ref="generalBattery"/>
-   
-   
    
    </xs:choice>
   </xs:complexType>
@@ -111,18 +91,8 @@
 <xs:simpleType name="task_repository">
   <xs:restriction base="xs:string">
     
-  
   <xs:enumeration value="move"/>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+    
   <xs:enumeration value="extinguishfire"/>
   
   
@@ -131,14 +101,6 @@
   <xs:enumeration value="chargebattery"/>
   <xs:enumeration value="removeDebris"/>
   <xs:enumeration value="go"/>
-  
-  
-  
-  
-  
-  
-  
-  
   
   <xs:enumeration value="takePhoto"/>
   
@@ -215,12 +177,6 @@
   </xs:complexType>
 </xs:element>
 
-
-
-
-
-
-
 <xs:element id="static_term-moveStep" name="moveStep">
   <xs:complexType>
    <xs:sequence/>
@@ -256,15 +212,6 @@
    <xs:attribute name="value" type="Integer_type"/>
   </xs:complexType>
  </xs:element>
-
-
-
-
-
-
-
-
-
 
 <xs:simpleType name="Location_type">
   <xs:restriction base="xs:string">

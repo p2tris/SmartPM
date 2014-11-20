@@ -30,4 +30,7 @@ if( ! socket_send ( $sock , $message , strlen($message) , 0))
 }
  
 echo "Message send successfully \n";
+// print SUCCESS necessary for app to know the message is sent!
+print "SUCCESS";
+
 ?>
