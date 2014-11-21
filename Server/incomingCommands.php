@@ -10,7 +10,7 @@ fprintf($f,$_POST['string']);
 fprintf($f,"\n");
 fclose($f);
 
-$str = "assign(act1,[workitem(go,id_1,[loc00,loc33],[loc33])])";
+//$str = "assign(act1,[workitem(go,id_1,[loc00,loc33],[loc33])])";
 $arr = (preg_split('/\\) \\(|\\(|\\)/', $str, -1, PREG_SPLIT_NO_EMPTY));
 $commandsArr = array();
 /* parse input to multidimensional array like 
@@ -46,17 +46,17 @@ if($taskType == "assign"){
 	$expectedResult = $commandsArr[5][0];
 
 	// create task XML
-	$url = createTaskXML($id, $taskName, $expectedResult);
+	$url = createTaskXML($id, $taskName, $expectedResult, $actName);
 	
 	// send to device following message:
 	// taskName|Fill the Form;URL|http://halapuu.host56.com/pn/xmlgui1.xml
 	sendToDevice($actName, $url, $taskName);
 	
 } elseif ($taskType == "start"){
-	
+	echo "start message from engine";
 }
 
-function createTaskXML($id, $taskName, $expectedResult){
+function createTaskXML($id, $taskName, $expectedResult, $actName){
 	
 	// array of info from XSD
 	$typeOptLibRule = parseTypeFromXSD();
@@ -65,10 +65,10 @@ function createTaskXML($id, $taskName, $expectedResult){
 	$f = fopen($filename,"a");
 	
 	fprintf($f,'<?xml version="1.0" encoding="utf-8"?><xmlgui>');
-	fprintf($f,'<form id="'.$id.'" name="SmartPM taskXML" submitTo="http://smartpm.cloudapp.net/replyToServer.php" >');
+	fprintf($f,'<form id="'.$id.'" name="'.$taskName.'" actor="'.$actName.'" submitTo="http://smartpm.cloudapp.net/replyToServer.php" >');
 	// TODO: one field per task?
 	// get info for xml elements
-	fprintf($f,'<field name="'.$taskName.'" label="'.$taskName.'" type="text" required="Y" options="" autoLib="" rules=""/>');
+	fprintf($f,'<field name="'.$taskName.'_field" label="'.$taskName.'" type="text" required="Y" options="" autoLib="" rules=""/>');
 	fprintf($f,'</form></xmlgui>');
 	fclose($f);
 	return "http://smartpm.cloudapp.net/".$filename;
@@ -84,6 +84,8 @@ function parseTypeFromXSD(){
 }
 
 function sendToDevice($name, $url, $taskName){
+	// wait for 2sec for server to finish creating XML file
+	sleep(2);
 	// taskName|Fill the Form;URL|http://halapuu.host56.com/pn/xmlgui1.xml
 	$gcmRegID = "";
 	$result = mysql_query("SELECT gcm_regid from gcm_users WHERE name = '$name'");

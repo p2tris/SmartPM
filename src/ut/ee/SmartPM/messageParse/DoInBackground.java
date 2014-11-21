@@ -11,7 +11,6 @@ import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -32,7 +31,6 @@ import org.xml.sax.SAXException;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
@@ -131,6 +129,8 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 			NamedNodeMap map = form.getAttributes();
 			theForm.setFormNumber(map.getNamedItem("id").getNodeValue());
 			theForm.setFormName(map.getNamedItem("name").getNodeValue());
+			theForm.setActor(map.getNamedItem("actor").getNodeValue());
+			Log.d("actor is set", theForm.getActor());
 			if (map.getNamedItem("submitTo") != null)
 				theForm.setSubmitTo(map.getNamedItem("submitTo").getNodeValue());
 			else
@@ -174,8 +174,9 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 	        	public void onClick(View v) {
 	        		// check if this form is Valid
 	        		if(mBtn.getText() == "Start"){
-	        			
-	        			mLl.setVisibility(View.VISIBLE);
+	        			new sendReadyToStart(theForm).execute();
+
+	                    mLl.setVisibility(View.VISIBLE);
 	        			
 	        			// walk thru our form elements and dynamically create them, leveraging our mini library of tools.
 	        	        int i;

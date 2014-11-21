@@ -2,7 +2,7 @@
  * XmlGui application.
  * Written by Frank Ableson for IBM Developerworks
  * June 2010
- * Use the code as you wish -- no warranty of fitness, etc, etc.
+ * Use the code as you wish no warranty of fitness, etc, etc.
  */
 
 /**
@@ -18,11 +18,14 @@ import java.util.Vector;
 import java.util.ListIterator;
 import java.net.URLEncoder;
 
+import android.util.Log;
+
 public class XmlGuiForm {
 
 	private String formNumber;
 	private String formName;
 	private String submitTo;
+	private String actor;
 	public Vector<XmlGuiFormField> fields;
 	
 	
@@ -57,6 +60,14 @@ public class XmlGuiForm {
 	public void setSubmitTo(String submitTo) {
 		this.submitTo = submitTo;
 	}
+	
+	public String getActor() {
+		return actor;
+	}
+
+	public void setActor(String actor) {
+		this.actor = actor;
+	}
 
 	public Vector<XmlGuiFormField> getFields() {
 		return fields;
@@ -73,6 +84,7 @@ public class XmlGuiForm {
 		sb.append("Form Number: " + this.formNumber + "\n");
 		sb.append("Form Name: " + this.formName + "\n");
 		sb.append("Submit To: " + this.submitTo + "\n");
+		sb.append("Actor: " + this.actor + "\n");
 		if (this.fields == null) return sb.toString();
 		ListIterator<XmlGuiFormField> li = this.fields.listIterator();
 		while (li.hasNext()) {
@@ -116,7 +128,8 @@ public class XmlGuiForm {
 				sb.append(encstring);
 				i=1;
 			}
-	
+			sb.append("&taskId=" + this.formNumber + "&taskName=" + this.formName + "&actName=" + this.actor);
+			Log.d("readystring", sb.toString());
 			return sb.toString();
 		}
 		catch (Exception e) {

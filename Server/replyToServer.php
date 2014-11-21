@@ -18,8 +18,25 @@ if(!socket_connect($sock , 'localhost' , 5555))
 
 echo "Connection established \n";
  
-$message = "Here is your message from replyToServer.php  \r\n";
- 
+$message="replyToServer.php file \r\n";
+if(isset($_GET['taskId']) && !empty($_GET['taskId'])){
+	$taskId = $_GET['taskId'];
+	$taskName = $_GET['taskName'];
+	$actName = $_GET['actName'];
+	$output = $_GET[$taskName+'_field'];
+	$message = "finishedTask(".$actName.",".$taskId.",".$taskName.",[".$output."])\r\n";
+} elseif (isset($_POST['taskId']) && !empty($_POST['taskId'])) {
+	$taskId = $_POST['taskId'];
+	$taskName = $_POST['taskName'];
+	$actName = $_POST['actName'];
+	$message = "readyToStart(".$actName.",".$taskId.",".$taskName.")\r\n";
+} else {
+	$message = "Todo other messages \r\n";
+}
+
+
+
+
 //Send the message to the server
 if( ! socket_send ( $sock , $message , strlen($message) , 0))
 {
