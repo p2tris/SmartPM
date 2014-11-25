@@ -70,12 +70,14 @@ function createTaskXML($id, $taskName, $expectedResult, $actName){
 	
 	$filename = "tasks/task".time().".xml";
 	$f = fopen($filename,"a");
-	
 	fprintf($f,'<?xml version="1.0" encoding="utf-8"?><xmlgui>');
 	fprintf($f,'<form id="'.$id.'" name="'.$taskName.'" actor="'.$actName.'" submitTo="http://smartpm.cloudapp.net/replyToServer.php" >');
-	// TODO: one field per task?
+	
+	// TODO: for each expected result make new field!
 	// get info for xml elements
 	fprintf($f,'<field name="'.$taskName.'_field" label="'.$taskName.'" type="text" required="Y" options="" autoLib="" rules=""/>');
+	
+	
 	fprintf($f,'</form></xmlgui>');
 	fclose($f);
 	return "http://smartpm.cloudapp.net/".$filename;
@@ -84,7 +86,7 @@ function createTaskXML($id, $taskName, $expectedResult, $actName){
 function parseTypeFromXSD(){
 	$result = array();
 	
-	// todo - get options for createTaskXML and to get type, also autolib and rules. Default all required
+	// TODO: - get options for createTaskXML and to get type, also autolib and rules. Default all required
 	// explore XSD logic with Andrea!
 	
 	return $result;
