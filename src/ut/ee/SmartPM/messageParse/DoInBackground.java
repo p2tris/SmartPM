@@ -175,7 +175,8 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 	        		// check if this form is Valid
 	        		if(mBtn.getText() == "Start"){
 	        			new sendReadyToStart(theForm).execute();
-
+	        			mBtn.setClickable(false);
+	        			
 	                    mLl.setVisibility(View.VISIBLE);
 	        			
 	        			// walk thru our form elements and dynamically create them, leveraging our mini library of tools.
@@ -206,7 +207,7 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 	        			
 	        			
 	        			mBtn.setText("Stop");
-	        			mBtn.setClickable(true);
+	        			
 	        				        			
 	        			// TODO: Notify server about task being started
 	        			

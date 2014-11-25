@@ -53,7 +53,14 @@ if($taskType == "assign"){
 	sendToDevice($actName, $url, $taskName);
 	
 } elseif ($taskType == "start"){
-	echo "start message from engine";
+	// For the sake of protocol, allow to start with task with this message!
+	sendToDevice($actName, null, "start");
+} elseif ($taskType == "adaptStart"){
+	// Pause all services!
+	sendToDevice(null, null, "pause");
+} elseif ($taskType == "adaptFinish"){
+	// Resume all services!
+	sendToDevice(null, null, "resume");
 }
 
 function createTaskXML($id, $taskName, $expectedResult, $actName){
@@ -84,36 +91,97 @@ function parseTypeFromXSD(){
 }
 
 function sendToDevice($name, $url, $taskName){
-	// wait for 2sec for server to finish creating XML file
-	sleep(2);
-	// taskName|Fill the Form;URL|http://halapuu.host56.com/pn/xmlgui1.xml
-	$gcmRegID = "";
-	$result = mysql_query("SELECT gcm_regid from gcm_users WHERE name = '$name'");
-	if (!$result) {
-		die('Invalid query: ' . mysql_error());
-	}
-	if ($row = mysql_fetch_assoc($result)) {
-		$gcmRegID = $row["gcm_regid"];
-	}
-
-	$NumOfRows = mysql_num_rows($result);
-	if ($NumOfRows > 0) {
-		// user existed
-		$pushMessage = 'taskName|'.$taskName.';URL|'.$url;
-		
-		if (isset($gcmRegID) && isset($pushMessage)) {
-		
-		
-			$registration_ids = array($gcmRegID);
-			$message = array("message" => $pushMessage);
-			$result = send_push_notification($registration_ids, $message);
-		
-			echo $result;
+	if ($url == null){
+		if ($taskName == "start"){
+			$gcmRegID = "";
+			$result = mysql_query("SELECT gcm_regid from gcm_users WHERE name = '$name'");
+			if (!$result) {
+				die('Invalid query: ' . mysql_error());
+			}
+			if ($row = mysql_fetch_assoc($result)) {
+				$gcmRegID = $row["gcm_regid"];
+			}
+			
+			$NumOfRows = mysql_num_rows($result);
+			if ($NumOfRows > 0) {
+				// user existed
+				$pushMessage = 'taskName|'.$taskName;
+					
+				if (isset($gcmRegID) && isset($pushMessage)) {
+						
+						
+					$registration_ids = array($gcmRegID);
+					$message = array("message" => $pushMessage);
+					$result = send_push_notification($registration_ids, $message);
+						
+					echo $result;
+				}
+				return true;
+			} else {
+				// user not existed
+				return false;
+			}
+		} elseif ($taskName == "pause" || $taskName == "resume"){
+			$gcmRegID = array();
+			$result = mysql_query("SELECT gcm_regid from gcm_users WHERE name = '$name'");
+			if (!$result) {
+				die('Invalid query: ' . mysql_error());
+			}
+			while ($row = mysql_fetch_assoc($result)) {
+				$gcmRegID[]=$row['gcm_regid'];
+			}
+				
+			$NumOfRows = mysql_num_rows($result);
+			if ($NumOfRows > 0) {
+				// user existed
+				$pushMessage = 'taskName|'.$taskName;
+					
+				if (isset($gcmRegID) && isset($pushMessage)) {
+			
+			
+					$registration_ids = $gcmRegID;
+					$message = array("message" => $pushMessage);
+					$result = send_push_notification($registration_ids, $message);
+			
+					echo $result;
+				}
+				return true;
+			} else {
+				// user not existed
+				return false;
+			}
 		}
-		return true;
+		
 	} else {
-		// user not existed
-		return false;
+		// taskName|Fill the Form;URL|http://halapuu.host56.com/pn/xmlgui1.xml
+		$gcmRegID = "";
+		$result = mysql_query("SELECT gcm_regid from gcm_users WHERE name = '$name'");
+		if (!$result) {
+			die('Invalid query: ' . mysql_error());
+		}
+		if ($row = mysql_fetch_assoc($result)) {
+			$gcmRegID = $row["gcm_regid"];
+		}
+	
+		$NumOfRows = mysql_num_rows($result);
+		if ($NumOfRows > 0) {
+			// user existed
+			$pushMessage = 'taskName|'.$taskName.';URL|'.$url;
+			
+			if (isset($gcmRegID) && isset($pushMessage)) {
+			
+			
+				$registration_ids = array($gcmRegID);
+				$message = array("message" => $pushMessage);
+				$result = send_push_notification($registration_ids, $message);
+			
+				echo $result;
+			}
+			return true;
+		} else {
+			// user not existed
+			return false;
+		}
 	}
 }
 
