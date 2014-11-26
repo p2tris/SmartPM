@@ -25,7 +25,6 @@ public class XmlGuiBoolean extends LinearLayout {
 
 	public XmlGuiBoolean(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public String getValue()

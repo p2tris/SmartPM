@@ -7,20 +7,16 @@ package ut.ee.SmartPM.lib;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
-
-import org.apache.http.util.ByteArrayBuffer;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 import dalvik.system.DexClassLoader;
 
 public class LibLoader {
@@ -143,13 +139,10 @@ public class LibLoader {
 	                obj.getType();
 	                Log.d("LIB", obj.getType());
 				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (InstantiationException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
                 

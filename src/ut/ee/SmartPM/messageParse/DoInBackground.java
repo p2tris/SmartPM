@@ -174,6 +174,8 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 	        	public void onClick(View v) {
 	        		// check if this form is Valid
 	        		if(mBtn.getText() == "Start"){
+	        			
+	        			// Notify server about task being started
 	        			new sendReadyToStart(theForm).execute();
 	        			mBtn.setClickable(false);
 	        			
@@ -207,10 +209,7 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 	        			
 	        			
 	        			mBtn.setText("Stop");
-	        			
 	        				        			
-	        			// TODO: Notify server about task being started
-	        			
 	        		} else if (mBtn.getText() == "Stop") {
 		        		if (!CheckForm())
 		        		{

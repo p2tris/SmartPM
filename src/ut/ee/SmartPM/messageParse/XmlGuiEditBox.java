@@ -39,7 +39,6 @@ public class XmlGuiEditBox extends LinearLayout {
 
 	public XmlGuiEditBox(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public void makeNumeric()

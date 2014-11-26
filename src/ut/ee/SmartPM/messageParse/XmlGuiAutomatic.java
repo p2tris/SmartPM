@@ -39,7 +39,6 @@ public class XmlGuiAutomatic extends LinearLayout {
 
 	public XmlGuiAutomatic(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public String getValue()

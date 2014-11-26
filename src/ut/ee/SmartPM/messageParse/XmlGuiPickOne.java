@@ -41,7 +41,6 @@ public class XmlGuiPickOne extends LinearLayout {
 
 	public XmlGuiPickOne(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 	}
 	
 	

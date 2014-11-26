@@ -1,6 +1,7 @@
 <?php
 require_once('loader.php');
 
+// Must be POST
 $str = $_POST['string'];
 $filename = "uploads/incomingCommands.txt";
 
@@ -35,7 +36,6 @@ foreach($arr as $elem){
 	}
 }
 
-
 // Logic of different commands
 $taskType = $commandsArr[0][0];
 if($taskType == "assign"){
@@ -43,7 +43,7 @@ if($taskType == "assign"){
 	$actName = $commandsArr[1][0];
 	$taskName = $commandsArr[3][0];
 	$id = $commandsArr[3][1];
-	$expectedResult = $commandsArr[5][0];
+	$expectedResult = $commandsArr[5];
 
 	// create task XML
 	$url = createTaskXML($id, $taskName, $expectedResult, $actName);
@@ -54,6 +54,7 @@ if($taskType == "assign"){
 	
 } elseif ($taskType == "start"){
 	// For the sake of protocol, allow to start with task with this message!
+	$actName = $commandsArr[1][0];
 	sendToDevice($actName, null, "start");
 } elseif ($taskType == "adaptStart"){
 	// Pause all services!
@@ -75,8 +76,11 @@ function createTaskXML($id, $taskName, $expectedResult, $actName){
 	
 	// TODO: for each expected result make new field!
 	// get info for xml elements
-	fprintf($f,'<field name="'.$taskName.'_field" label="'.$taskName.'" type="text" required="Y" options="" autoLib="" rules=""/>');
-	
+	$i = 0;
+	foreach ($expectedResult as $fields){
+		fprintf($f,'<field name="'.$i.'_field" label="'.$taskName.' expected: '.$fields.'" type="text" required="Y" options="" autoLib="" rules=""/>');
+		$i += 1;
+	}
 	
 	fprintf($f,'</form></xmlgui>');
 	fclose($f);
@@ -107,7 +111,7 @@ function sendToDevice($name, $url, $taskName){
 			$NumOfRows = mysql_num_rows($result);
 			if ($NumOfRows > 0) {
 				// user existed
-				$pushMessage = 'taskName|'.$taskName;
+				$pushMessage = 'taskName|'.$taskName.';';
 					
 				if (isset($gcmRegID) && isset($pushMessage)) {
 						
@@ -136,7 +140,7 @@ function sendToDevice($name, $url, $taskName){
 			$NumOfRows = mysql_num_rows($result);
 			if ($NumOfRows > 0) {
 				// user existed
-				$pushMessage = 'taskName|'.$taskName;
+				$pushMessage = 'taskName|'.$taskName.';';
 					
 				if (isset($gcmRegID) && isset($pushMessage)) {
 			

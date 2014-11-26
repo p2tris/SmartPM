@@ -18,7 +18,6 @@ public class sendReadyToStart extends AsyncTask<String, Void, Void>{
 	XmlGuiForm theForm;
 		
 	public sendReadyToStart(XmlGuiForm theForm) {
-		// TODO Auto-generated constructor stub
 		this.theForm = theForm;
 	}
 	

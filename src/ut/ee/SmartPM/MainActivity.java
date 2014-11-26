@@ -158,11 +158,12 @@ public class MainActivity extends Activity {
 			if(messageMap.containsKey("taskName")){
 				// Display message on the screen
 				lblMessage.setText(messageMap.get("taskName"));
-				if(messageMap.get("taskName") == "start"){
+				Log.d("TASKNAME", messageMap.get("taskName"));
+				if(messageMap.get("taskName").equals("start")){
 					executeBtn.setClickable(true);
-				} else if (messageMap.get("taskName") == "pause") {
+				} else if (messageMap.get("taskName").equals("pause")) {
 					executeBtn.setClickable(false);
-				} else if (messageMap.get("taskName") == "resume") {
+				} else if (messageMap.get("taskName").equals("resume")) {
 					executeBtn.setClickable(true);
 				}
 			} else {

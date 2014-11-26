@@ -24,9 +24,18 @@ if(isset($_GET['taskId']) && !empty($_GET['taskId'])){
 	$taskName = $_GET['taskName'];
 	$actName = $_GET['actName'];
 	
-	// TODO: take all outputs and seperate with comma
-	$output = $_GET[$taskName.'_field'];
-	
+	$output = '';
+	print_r($output);
+	$i = 0;
+	while (isset($_GET[$i.'_field'])){
+		if ($i != 0){
+			$output .= ','.$_GET[$i.'_field'];
+			$i++;
+		} else {
+			$output .= $_GET[$i.'_field'];
+			$i++;
+		}
+	}
 	$message = "finishedTask(".$actName.",".$taskId.",".$taskName.",[".$output."])\r\n";
 } elseif (isset($_POST['taskId']) && !empty($_POST['taskId'])) {
 	$taskId = $_POST['taskId'];
