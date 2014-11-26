@@ -74,8 +74,8 @@ function createTaskXML($id, $taskName, $expectedResult, $actName){
 	fprintf($f,'<?xml version="1.0" encoding="utf-8"?><xmlgui>');
 	fprintf($f,'<form id="'.$id.'" name="'.$taskName.'" actor="'.$actName.'" submitTo="http://smartpm.cloudapp.net/replyToServer.php" >');
 	
-	// TODO: for each expected result make new field!
-	// get info for xml elements
+	// for each expected result make new field
+	// TODO: get info for xml elements
 	$i = 0;
 	foreach ($expectedResult as $fields){
 		fprintf($f,'<field name="'.$i.'_field" label="'.$taskName.' expected: '.$fields.'" type="text" required="Y" options="" autoLib="" rules=""/>');
