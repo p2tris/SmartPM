@@ -3,26 +3,46 @@
    //Storing new user and returns user details
    
    function storeUser($name, $email, $gcm_regid) {
-	   
-        // insert user into database
-        $result = mysql_query("INSERT INTO gcm_users(name, email, gcm_regid, created_at) VALUES('$name', '$email', '$gcm_regid', NOW())");
-		
-        // check for successful store
-        if ($result) {
-			
-            // get user details
-            $id = mysql_insert_id(); // last inserted id
-            $result = mysql_query("SELECT * FROM gcm_users WHERE id = $id") or die(mysql_error());
-            // return user details
-            if (mysql_num_rows($result) > 0) {
-                return mysql_fetch_array($result);
-            } else {
-                return false;
-            }
-			
-        } else {
-            return false;
-        }
+   		$results = getUserByName($name);
+	   if (mysql_num_rows($results) < 1){
+
+	   	// insert user into database
+	   	$result = mysql_query("INSERT INTO gcm_users(name, email, gcm_regid, created_at) VALUES('$name', '$email', '$gcm_regid', NOW())");
+	   	 
+	   	// check for successful store
+	   	if ($result) {
+	   		 
+	   		// get user details
+	   		$id = mysql_insert_id(); // last inserted id
+	   		$result = mysql_query("SELECT * FROM gcm_users WHERE id = $id") or die(mysql_error());
+	   		// return user details
+	   		if (mysql_num_rows($result) > 0) {
+	   			return mysql_fetch_array($result);
+	   		} else {
+	   			return false;
+	   		}
+	   		 
+	   	} else {
+	   		return false;
+	   	}  
+	   } else {
+	   	$result = mysql_query("UPDATE gcm_users SET email='$email', gcm_regid='$gcm_regid', created_at=NOW() WHERE name='$name'");
+	   	if ($result) {
+	   	
+	   		// get user details
+	   		$result = mysql_query("SELECT * FROM gcm_users WHERE name = $name") or die(mysql_error());
+	   		// return user details
+	   		if (mysql_num_rows($result) > 0) {
+	   			return mysql_fetch_array($result);
+	   		} else {
+	   			return false;
+	   		}
+	   	
+	   	} else {
+	   		return false;
+	   	}
+	   } 
+       
     }
 
     /**
@@ -31,6 +51,11 @@
    function getUserByEmail($email) {
         $result = mysql_query("SELECT * FROM gcm_users WHERE email = '$email' LIMIT 1");
         return $result;
+    }
+    
+    function getUserByName($name) {
+    	$result = mysql_query("SELECT * FROM gcm_users WHERE name = '$name' LIMIT 1");
+    	return $result;
     }
 
     // Getting all registered users
