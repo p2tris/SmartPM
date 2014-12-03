@@ -65,10 +65,7 @@ if($taskType == "assign"){
 }
 
 function createTaskXML($id, $taskName, $expectedResult, $actName){
-	
-	// array of info from XSD
-	$typeOptLibRule = parseTypeFromXSD();
-	
+		
 	$filename = "tasks/task".time().".xml";
 	$f = fopen($filename,"a");
 	fprintf($f,'<?xml version="1.0" encoding="utf-8"?><xmlgui>');
@@ -77,9 +74,30 @@ function createTaskXML($id, $taskName, $expectedResult, $actName){
 	// for each expected result make new field
 	// TODO: get info for xml elements
 	$i = 0;
-	foreach ($expectedResult as $fields){
-		fprintf($f,'<field name="'.$i.'_field" label="'.$taskName.' expected: '.$fields.'" type="text" required="Y" options="" autoLib="" rules=""/>');
-		$i += 1;
+	if (sizeof($expectedResult) == 0){
+		fprintf($f,'<field name="'.$i.'_field" label="'.$taskName.' expected: '.$fields.'" type="text" required="N" options="" autoLib="" rules=""/>');
+	} else {
+		foreach ($expectedResult as $fields){
+			if ($fields == "true" || $fields == "false"){
+				fprintf($f,'<field name="'.$i.'_field" label="'.$taskName.' expected: '.$fields.'" type="boolean" required="N" options="" autoLib="" rules=""/>');
+			} else {
+				// array of info from XSD
+				$typeOptLibRule = parseTypeFromXSD($fields);
+				if ($typeOptLibRule[0] == 'automaticTask'){
+					fprintf($f,'<field name="'.$i.'_field" label="'.$taskName.' expected '.$fields.'" type="auto" required="N" options="" autoLib="'.$typeOptLibRule[2].'" rules="'.$typeOptLibRule[1].'"/>');
+				} elseif (is_numeric($fields)){
+					fprintf($f,'<field name="'.$i.'_field" label="'.$taskName.' expected between: '.$typeOptLibRule[0].' and '.$typeOptLibRule[1].'" type="numeric" required="Y" options="" autoLib="" rules=""/>');
+				} else {
+					$options = "";
+					foreach ($typeOptLibRule as $option){
+						$options .= $option."|";
+					}
+					fprintf($f,'<field name="'.$i.'_field" label="'.$taskName.' expected '.$fields.'" type="choice" required="N" options="'.substr($options, 0, -1).'" autoLib="" rules=""/>');
+				}
+			}
+			
+			$i += 1;
+		}
 	}
 	
 	fprintf($f,'</form></xmlgui>');
@@ -87,13 +105,63 @@ function createTaskXML($id, $taskName, $expectedResult, $actName){
 	return "http://smartpm.cloudapp.net/".$filename;
 }
 
-function parseTypeFromXSD(){
+function parseTypeFromXSD($expectedResult){
+	$doc = new DOMDocument(); 
+	$doc->preserveWhiteSpace = true;
+	$doc->load('uploads/new_schema.xsd');
+	$doc->save('t.xml');
+	$xmlfile = file_get_contents('t.xml');
+	$parseObj = str_replace($doc->lastChild->prefix.':',"",$xmlfile);
+	$ob= simplexml_load_string($parseObj);
+	$json  = json_encode($ob);
+	$data = json_decode($json, true);
+	$simpledata = array_intersect_key($data, array_flip(array('simpleType')));
+	
 	$result = array();
+	$enumArr = array();
 	
-	// TODO: - get options for createTaskXML and to get type, also autolib and rules. Default all required
-	// explore XSD logic with Andrea!
+	foreach($simpledata as $elemtype){
+		foreach($elemtype as $elem){
+			if(isset($elem['@attributes']['url'])){
+				array_push($result, 'automaticTask');
+				array_push($result, $elem['@attributes']['url']);
+				$taskDataXML = simplexml_load_file($result[0]) or die("feed not loading");
+				$taskJson  = json_encode($taskDataXML);
+				$taskData = json_decode($taskJson, true);
+				array_push($result, $taskData['lib']['@attributes']['url']);
+				print_r($result);
+				return($result);
+				
+			} else {
+				if(is_numeric($expectedResult) && strpos($elem['@attributes']['name'], 'Integer_type') !== false){
+					$result[0] = $elem['restriction']['minInclusive']['@attributes']['value'];
+					$result[1] = $elem['restriction']['maxInclusive']['@attributes']['value'];
+					print_r($result);
+					return($result);
+						
+				} elseif (strpos($elem['@attributes']['name'], '_type') !== false) {
+					foreach($elem['restriction']['enumeration'] as $choice){
+						foreach($choice['@attributes'] as $attr){
+							if($attr == $expectedResult){
+								$enumArr = $elem;
+								break 4;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 	
-	return $result;
+	if(sizeof($enumArr) > 0){
+		foreach($enumArr['restriction']['enumeration'] as $choice){
+			foreach($choice['@attributes'] as $attr){
+				array_push($result, $attr);
+			}
+		}
+		return($result);
+	}
+	
 }
 
 function sendToDevice($name, $url, $taskName){
