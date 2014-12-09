@@ -197,12 +197,12 @@ function sendToDevice($name, $url, $taskName){
 			}
 		} elseif ($taskName == "pause" || $taskName == "resume"){
 			$gcmRegID = array();
-			$result = mysql_query("SELECT gcm_regid from gcm_users WHERE name = '$name'");
+			$result = mysql_query("SELECT gcm_regid from gcm_users");
 			if (!$result) {
 				die('Invalid query: ' . mysql_error());
 			}
 			while ($row = mysql_fetch_assoc($result)) {
-				$gcmRegID[]=$row['gcm_regid'];
+				array_push($gcmRegID, $row['gcm_regid']);
 			}
 				
 			$NumOfRows = mysql_num_rows($result);

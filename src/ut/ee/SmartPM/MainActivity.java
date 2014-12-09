@@ -127,7 +127,7 @@ public class MainActivity extends Activity {
 		}
 		
 		if (lblMessage.getText() == "") {
-			lblMessage.setText("No tasks!");
+			lblMessage.setText("No tasks for actor " + name);
 			executeBtn.setClickable(false);
 			executeBtn.setVisibility(View.INVISIBLE);
 		}
@@ -170,7 +170,7 @@ public class MainActivity extends Activity {
 				// Display message on the screen
 				lblMessage.setText("New TASK!");
 			}
-			Toast.makeText(getApplicationContext(), "Got Message: " + newMessage, Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), "Got Message: " + newMessage, Toast.LENGTH_SHORT).show();
 			
 			if(messageMap.containsKey("URL")){
 				executeBtn.setVisibility(View.VISIBLE);
@@ -204,7 +204,8 @@ public class MainActivity extends Activity {
 			Log.e("UnRegister Receiver Error", "> " + e.getMessage());
 		}
 		
-		// TODO: Notify server about application being closed, possibly task stopped.
+		// TODO: Save task status to memory...
+		removeMeFromDB();
 		
 		super.onDestroy();
 	}
@@ -221,8 +222,9 @@ public class MainActivity extends Activity {
         switch (item.getItemId()) {  
         	//log out selected
             case R.id.item1:  
-            	GCMRegistrar.unregister(context);
-            	finish();            
+            	            	
+            	removeMeFromDB();
+            	
             //map selected
             case R.id.item2:  
               return true;     
@@ -234,6 +236,37 @@ public class MainActivity extends Activity {
               default:  
                 return super.onOptionsItemSelected(item);  
         }  
-    }  
+    } 
+    
+    public void removeMeFromDB(){
+    	// Try to register again, but not in the UI thread.
+		// It's also necessary to cancel the thread onDestroy(),
+		// hence the use of AsyncTask instead of a raw thread.
+		
+		mRegisterTask = new AsyncTask<Void, Void, Void>() {
+
+			@Override
+			protected Void doInBackground(Void... params) {
+				
+				// Register on our server
+				// On server creates a new user
+				aController.unregister(context, name);
+				
+				return null;
+			}
+
+			@Override
+			protected void onPostExecute(Void result) {
+				mRegisterTask = null;
+			}
+
+		};
+		
+		// execute AsyncTask
+		mRegisterTask.execute(null, null, null);
+		GCMRegistrar.unregister(context);
+		super.finishActivity(RegisterActivity.CONTEXT_INCLUDE_CODE);
+    	finish();            
+    }
 
 }

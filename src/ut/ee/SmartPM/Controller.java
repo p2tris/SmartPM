@@ -107,13 +107,13 @@ public class Controller extends Application{
     
      // TODO: If unregistering needed
      // Unregister this account/device pair within the server.
-     void unregister(final Context context, final String regId) {
+     void unregister(final Context context, final String name) {
     	 
-        Log.i(Config.TAG, "unregistering device (regId = " + regId + ")");
+        Log.i(Config.TAG, "unregistering device (name = " + name + ")");
         
-        String serverUrl = Config.YOUR_SERVER_URL + "/unregister";
+        String serverUrl = "http://smartpm.cloudapp.net/unregister.php";
         Map<String, String> params = new HashMap<String, String>();
-        params.put("regId", regId);
+        params.put("name", name);
         
         try {
             post(serverUrl, params);
