@@ -2,6 +2,7 @@
 require_once('loader.php');
 
 // Must be POST
+//$str = $_GET['string'];
 $str = $_POST['string'];
 $filename = "uploads/incomingCommands.txt";
 
@@ -37,7 +38,7 @@ foreach($arr as $elem){
 }
 
 // Logic of different commands
-$taskType = $commandsArr[0][0];
+$taskType = trim($commandsArr[0][0]);
 if($taskType == "assign"){
 	
 	$actName = $commandsArr[1][0];
@@ -66,7 +67,7 @@ if($taskType == "assign"){
 
 function createTaskXML($id, $taskName, $expectedResult, $actName){
 		
-	$filename = "tasks/task".time().".xml";
+	$filename = "tasks/task".time()."".$actName.".xml";
 	$f = fopen($filename,"a");
 	fprintf($f,'<?xml version="1.0" encoding="utf-8"?><xmlgui>');
 	fprintf($f,'<form id="'.$id.'" name="'.$taskName.'" actor="'.$actName.'" submitTo="http://smartpm.cloudapp.net/replyToServer.php" >');
@@ -111,41 +112,29 @@ function parseTypeFromXSD($expectedResult){
 	$doc->load('uploads/new_schema.xsd');
 	$doc->save('t.xml');
 	$xmlfile = file_get_contents('t.xml');
-	$parseObj = str_replace($doc->lastChild->prefix.':',"",$xmlfile);
+	$parseObj = str_replace($doc->lastChild->prefix.':',"",$xmlfile); //?? TODO!
 	$ob= simplexml_load_string($parseObj);
 	$json  = json_encode($ob);
 	$data = json_decode($json, true);
 	$simpledata = array_intersect_key($data, array_flip(array('simpleType')));
-	
 	$result = array();
 	$enumArr = array();
 	
 	foreach($simpledata as $elemtype){
 		foreach($elemtype as $elem){
-			if(isset($elem['@attributes']['url'])){
-				array_push($result, 'automaticTask');
-				array_push($result, $elem['@attributes']['url']);
-				$taskDataXML = simplexml_load_file($result[0]) or die("feed not loading");
-				$taskJson  = json_encode($taskDataXML);
-				$taskData = json_decode($taskJson, true);
-				array_push($result, $taskData['lib']['@attributes']['url']);
+		
+			if(is_numeric($expectedResult) && strpos($elem['@attributes']['name'], 'Integer_type') !== false){
+				$result[0] = $elem['restriction']['minInclusive']['@attributes']['value'];
+				$result[1] = $elem['restriction']['maxInclusive']['@attributes']['value'];
 				print_r($result);
 				return($result);
-				
-			} else {
-				if(is_numeric($expectedResult) && strpos($elem['@attributes']['name'], 'Integer_type') !== false){
-					$result[0] = $elem['restriction']['minInclusive']['@attributes']['value'];
-					$result[1] = $elem['restriction']['maxInclusive']['@attributes']['value'];
-					print_r($result);
-					return($result);
-						
-				} elseif (strpos($elem['@attributes']['name'], '_type') !== false) {
-					foreach($elem['restriction']['enumeration'] as $choice){
-						foreach($choice['@attributes'] as $attr){
-							if($attr == $expectedResult){
-								$enumArr = $elem;
-								break 4;
-							}
+					
+			} elseif (strpos($elem['@attributes']['name'], '_type') !== false) {
+				foreach($elem['restriction']['enumeration'] as $choice){
+					foreach($choice['@attributes'] as $attr){
+						if($attr == $expectedResult){
+							$enumArr = $elem;
+							break 4;
 						}
 					}
 				}
@@ -154,6 +143,17 @@ function parseTypeFromXSD($expectedResult){
 	}
 	
 	if(sizeof($enumArr) > 0){
+		if(isset($enumArr['@attributes']['url'])){
+			array_push($result, 'automaticTask');
+			array_push($result, $enumArr['@attributes']['url']);
+						
+			$taskDataXML = simplexml_load_file($result[1]);
+			$taskJson  = json_encode($taskDataXML);
+			$taskData = json_decode($taskJson, true);
+			array_push($result, $taskData['lib']['@attributes']['url']);
+			
+			return($result);
+		}
 		foreach($enumArr['restriction']['enumeration'] as $choice){
 			foreach($choice['@attributes'] as $attr){
 				array_push($result, $attr);
