@@ -8,6 +8,7 @@ import com.google.android.gcm.GCMRegistrar;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +20,7 @@ public class RegisterActivity extends Activity {
 	// UI elements
 	EditText txtName; 
 	EditText txtEmail;
+	public static final String PREFS_NAME = "MyPrefsFile";
 	
 	// Register button
 	Button btnRegister;
@@ -55,9 +57,6 @@ public class RegisterActivity extends Activity {
 			 return;
 		}
 		
-		
-		
-		
 		// Check if the user is already registered
 		// Make sure the device has the proper dependencies.
 		GCMRegistrar.checkDevice(this);
@@ -70,11 +69,6 @@ public class RegisterActivity extends Activity {
 			Intent i = new Intent(getApplicationContext(), MainActivity.class);
 			startActivity(i);
 		}
-
-		
-		
-		
-
 		
 		txtName = (EditText) findViewById(R.id.txtName);
 		txtEmail = (EditText) findViewById(R.id.txtEmail);
@@ -95,6 +89,13 @@ public class RegisterActivity extends Activity {
 					// Launch Main Activity
 					Intent i = new Intent(getApplicationContext(), MainActivity.class);
 					
+					SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+				    SharedPreferences.Editor editor = settings.edit();
+				    editor.putString("name", name);
+	
+				    // Commit the edits!
+				    editor.commit();
+				       
 					// Registering user on our server					
 					// Sending registration details to MainActivity
 					i.putExtra("name", name);

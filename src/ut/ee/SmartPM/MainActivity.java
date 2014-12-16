@@ -13,6 +13,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +33,11 @@ public class MainActivity extends Activity {
 	Controller aController;
 	public LinearLayout ll;
 	Button executeBtn;
+	TextView statusbar;
+	
+	public static final String PREFS_NAME = "MyPrefsFile";
+	
+	public static String actorName;
 	
 	// Asyntask
 	AsyncTask<Void, Void, Void> mRegisterTask;
@@ -47,9 +53,12 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		LinearLayout ll = (LinearLayout) findViewById(R.id.ll);
 		
+		// Restore preferences
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        actorName = settings.getString("name", "Anon");
+        
 		//Get Global Controller Class object (see application tag in AndroidManifest.xml)
 		aController = (Controller) getApplicationContext();
-		
 		
 		// Check if Internet present
 		if (!aController.isConnectingToInternet()) {
@@ -70,13 +79,13 @@ public class MainActivity extends Activity {
 		
 		lblMessage = (TextView) findViewById(R.id.lblMessage);
 		executeBtn = (Button)findViewById(R.id.StartStop);
+		statusbar = (TextView) findViewById(R.id.textView1);
 		
 		// Make sure the device has the proper dependencies.
 		GCMRegistrar.checkDevice(this);
 
 		// Make sure the manifest permissions was properly set 
 		GCMRegistrar.checkManifest(this);
-
 		
 		// Register custom Broadcast receiver to show messages on activity
 		registerReceiver(mHandleMessageReceiver, new IntentFilter(
@@ -127,9 +136,11 @@ public class MainActivity extends Activity {
 		}
 		
 		if (lblMessage.getText() == "") {
-			lblMessage.setText("No tasks for actor " + name);
+			lblMessage.setText("No tasks");
 			executeBtn.setClickable(false);
 			executeBtn.setVisibility(View.INVISIBLE);
+			statusbar.setText("Actor: " + actorName);
+			
 		}
 				
 	}		
@@ -157,27 +168,32 @@ public class MainActivity extends Activity {
 			aController.acquireWakeLock(getApplicationContext());
 			if(messageMap.containsKey("taskName")){
 				// Display message on the screen
-				lblMessage.setText(messageMap.get("taskName"));
+				
 				Log.d("TASKNAME", messageMap.get("taskName"));
 				if(messageMap.get("taskName").equals("start")){
 					executeBtn.setClickable(true);
+					statusbar.setText("Actor: " + actorName + " Status: Start");
 				} else if (messageMap.get("taskName").equals("pause")) {
 					executeBtn.setClickable(false);
+					statusbar.setText("Actor: " + actorName + " Status: Adaptation in process");
 				} else if (messageMap.get("taskName").equals("resume")) {
 					executeBtn.setClickable(true);
+					statusbar.setText("Actor: " + actorName + " Status: Resumed from adaptation");
 				}
 			} else {
 				// Display message on the screen
-				lblMessage.setText("New TASK!");
+				lblMessage.setText("New TASK");
 			}
 			Toast.makeText(getApplicationContext(), "Got Message: " + newMessage, Toast.LENGTH_SHORT).show();
 			
 			if(messageMap.containsKey("URL")){
+				statusbar.setText("Actor: " + actorName + " Status: New task");
+				lblMessage.setText(messageMap.get("taskName"));
 				executeBtn.setVisibility(View.VISIBLE);
 				LinearLayout ll = (LinearLayout) findViewById(R.id.ll);
 				new DoInBackground(context, ll, executeBtn, lblMessage).execute(messageMap.get("URL"));
 			} else {
-				lblMessage.setText("No task URL");
+				lblMessage.setText("No task");
 			}
 									
 			// Releasing wake lock
@@ -265,7 +281,6 @@ public class MainActivity extends Activity {
 		// execute AsyncTask
 		mRegisterTask.execute(null, null, null);
 		GCMRegistrar.unregister(context);
-		super.finishActivity(RegisterActivity.CONTEXT_INCLUDE_CODE);
     	finish();            
     }
 
