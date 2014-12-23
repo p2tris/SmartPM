@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>SmartPM Arduino tool</title>
+
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/jquery-ui-1.9.2.min.css" />
+
+	
+	<script type="text/javascript" src="js/jquery-1.8.3.min.js"> </script>
+	<script type="text/javascript" src="js/jquery-ui-1.9.2.min.js" > </script>
+	<script type="text/javascript" src="js/arduino-tool.js" > </script>
+
+</head>
+
+<body>
+
+	<div id="HeaderLogo" align="center">
+		<img src="SmartPM.png" alt="SmartPM logo" align="center" style="width:120px;"/>
+	</div>
+	<div id="resultTag" class="text-center">
+		<h1 >SmartPM arduinoLibrary tool</h1>
+	</div>
+	<div class="barTool">
+		<form>
+			<div id="slider"></div>
+			<br />
+			<div id="sliderElements">
+			</div>
+		</form>
+	</div>
+	
+	<br/>
+	<div id="resultTag">
+		<h1 class="text-center">Result:</h1>
+	</div>
+	<div id="resultXMLURL" class="text-center bg-info"> 
+		<p>Generated result XML will appear here!</p>
+	</div>
+	<div id="table" >
+		<table  class="table table-striped table-bordered">
+			<thead>
+			<tr>
+				<td><b>Low</b></td>
+				<td><b>High</b></td>
+				<td><b>Name</b></td>
+				<td><b><button onClick="printXml()" class="btn btn-success btn-block">CreateXML</button> </b></td>
+			</tr>
+			</thead>
+			<tbody id="volList">
+			</tbody>
+		</table>
+	</div>
+	<br/>
+	<div id="loudTips" class="text-center">
+		<h1 >Humidity tips</h1>
+	</div>
+	<div id="noiseInfo">
+		<small>
+		<table class="table table-striped table-bordered">
+			<thead>
+				<tr >
+					<th><strong>%</strong></th>
+					<th><strong>Humidity level</strong></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr >
+					<td >
+					<div>100</div>
+					</td>
+					<td >Wet</td>
+				</tr>
+				<tr >
+					<td>
+					<div >60</div>
+					</td>
+					<td >Noticeable</td>
+				</tr>
+				<tr >
+					<td >
+					<div>35-55</div>
+					</td>
+					<td>Normal room </td>
+				</tr>
+				<tr >
+					<td >
+					<div>10-30</div>
+					</td>
+					<td >Mojave desert </td>
+				</tr>
+				<tr >
+					<td >
+					<div>0-10</div>
+					</td>
+					<td >Extremely dry</td>
+				</tr>
+			</tbody>
+		</table>
+		</small>
+	</div>
+ 
+</body>
+</html>

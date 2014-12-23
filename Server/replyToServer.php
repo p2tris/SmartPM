@@ -43,7 +43,7 @@ if(isset($_GET['taskId']) && !empty($_GET['taskId'])){
 	$actName = $_POST['actName'];
 	$message = "readyToStart(".$actName.",".$taskId.",".$taskName.")\r\n";
 } else {
-	$message = "Not recognised message/command! \r\n";
+	$message = "Todo other messages \r\n";
 }
 
 

@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><humid_type><lib name="humid lib" url="http://smartpm.cloudapp.net/SmartPM_libHumid.apk" /><data_value low="0" high="10" value="value1" /><data_value low="10" high="20" value="value2" /><data_value low="20" high="32" value="value3" /><data_value low="32" high="100" value="value4" /></humid_type>

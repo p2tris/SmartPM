@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:simpleType name="Service">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="act1"/>
+    <xs:enumeration value="act2"/>
+    <xs:enumeration value="act3"/>
+    <xs:enumeration value="act4"/>
+    <xs:enumeration value="rb1"/>
+    <xs:enumeration value="rb2"/>   
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="Capability">
+  <xs:restriction base="xs:string">
+   <xs:enumeration value="movement"/>
+    <xs:enumeration value="hatchet"/>
+    <xs:enumeration value="camera"/>
+    <xs:enumeration value="gprs"/>
+     <xs:enumeration value="extinguisher"/>
+    <xs:enumeration value="battery"/>
+    <xs:enumeration value="digger"/>
+  	<xs:enumeration value="powerpack"/>
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="Boolean_type">
+  <xs:restriction base="xs:boolean">
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="Integer_type">
+  <xs:restriction base="xs:integer">
+    <xs:minInclusive value="0"/>
+  	<xs:maxInclusive value="30"/>
+  </xs:restriction>
+</xs:simpleType>
+
+
+ 
+ 
+ 
+ <xs:simpleType name="Actor">
+  <xs:restriction base="Service">
+   <xs:enumeration value="act1"/>
+   <xs:enumeration value="act2"/>
+   <xs:enumeration value="act3"/>
+   <xs:enumeration value="act4"/>
+  </xs:restriction>
+ </xs:simpleType> 
+ 
+<xs:simpleType name="Robot">
+  <xs:restriction base="Service">
+   <xs:enumeration value="rb1"/>
+   <xs:enumeration value="rb2"/>
+  </xs:restriction>
+ </xs:simpleType>
+ 
+ <xs:element id="theory" name="theory">
+  <xs:complexType>
+    <xs:choice maxOccurs="unbounded">
+      <xs:element minOccurs="0" ref="provides"/>
+      <xs:element minOccurs="0" ref="requires"/>
+   
+   
+   
+   
+   
+   
+   <xs:element minOccurs="0" ref="moveStep"/>
+   <xs:element minOccurs="0" ref="debrisStep"/>
+   <xs:element minOccurs="0" ref="neigh"/>
+   <xs:element minOccurs="0" ref="covered"/>
+   <xs:element minOccurs="0" ref="batteryRecharging"/>
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   <xs:element minOccurs="0" ref="at"/>
+   <xs:element minOccurs="0" ref="evacuated"/>
+   <xs:element minOccurs="0" ref="status"/>
+   <xs:element minOccurs="0" ref="photoTaken"/>
+   <xs:element minOccurs="0" ref="batteryLevel"/>
+   <xs:element minOccurs="0" ref="generalBattery"/>
+   
+   
+   
+   </xs:choice>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="repository">
+  <xs:complexType>
+    <xs:choice maxOccurs="unbounded">
+      <xs:element minOccurs="0" ref="provides"/>
+      <xs:element minOccurs="0" ref="requires"/>
+      <xs:element minOccurs="0" ref="task_definition"/>      
+	  <xs:element minOccurs="0" ref="exogenous_event_definition"/>   
+      <xs:element minOccurs="0" ref="formula_definition"/>      
+   </xs:choice>
+  </xs:complexType>
+</xs:element>
+
+<xs:simpleType name="task_repository">
+  <xs:restriction base="xs:string">
+    
+  
+  <xs:enumeration value="move"/>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <xs:enumeration value="extinguishfire"/>
+  
+  
+  <xs:enumeration value="evacuate"/>
+  
+  <xs:enumeration value="chargebattery"/>
+  <xs:enumeration value="removeDebris"/>
+  <xs:enumeration value="go"/>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <xs:enumeration value="takePhoto"/>
+  
+  <xs:enumeration value="updstatus"/>
+  <xs:enumeration value="initialize"/>
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="exogenous_event_repository">
+  <xs:restriction base="xs:string">
+    
+  	
+  	<xs:enumeration value="photoLost"/>
+  <xs:enumeration value="fire"/>
+  <xs:enumeration value="rockSlide"/>
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="formulae_repository">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="isConnected"/>
+  
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:element name="task_definition">
+  <xs:complexType>
+     <xs:choice maxOccurs="unbounded">
+      <xs:element minOccurs="0" name="argument" type="xs:string"/>
+	  <xs:element minOccurs="0" name="precondition" type="xs:string"/>   
+	  <xs:element minOccurs="0" name="supposed-effect" type="xs:string"/>
+	  <xs:element minOccurs="0" name="automatic-effect" type="xs:string"/>
+     </xs:choice>
+    <xs:attribute name="name" type="xs:string"/>
+  </xs:complexType>
+</xs:element>    
+
+<xs:element name="exogenous_event_definition">
+  <xs:complexType>
+     <xs:choice maxOccurs="unbounded">
+      <xs:element minOccurs="0" name="argument" type="xs:string"/>
+	  <xs:element minOccurs="0" name="effect" type="xs:string"/>
+     </xs:choice>
+    <xs:attribute name="name" type="xs:string"/>
+  </xs:complexType>
+</xs:element>   
+
+<xs:element name="formula_definition">
+  <xs:complexType>
+     <xs:choice maxOccurs="unbounded">
+      <xs:element minOccurs="0" name="argument" type="xs:string"/>
+	  <xs:element minOccurs="0" name="content" type="xs:string"/>
+     </xs:choice>
+    <xs:attribute name="name" type="xs:string"/>
+  </xs:complexType>
+</xs:element>   
+
+<xs:element id="predefined_term-provides" name="provides">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="service" type="Service"/>
+      <xs:element name="capability" type="Capability"/>
+    </xs:sequence>
+    <xs:attribute name="value" type="Boolean_type"/> 
+  </xs:complexType>
+</xs:element>
+
+<xs:element id="predefined_term-requires" name="requires">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="task" type="task_repository"/>
+      <xs:element name="capability" type="Capability"/>
+    </xs:sequence>
+    <xs:attribute name="value" type="Boolean_type"/> 
+  </xs:complexType>
+</xs:element>
+
+
+
+
+
+
+
+<xs:element id="static_term-moveStep" name="moveStep">
+  <xs:complexType>
+   <xs:sequence/>
+   <xs:attribute name="value" type="Integer_type"/>
+  </xs:complexType>
+ </xs:element>
+<xs:element id="static_term-debrisStep" name="debrisStep">
+  <xs:complexType>
+   <xs:sequence/>
+   <xs:attribute name="value" type="Integer_type"/>
+  </xs:complexType>
+ </xs:element>
+<xs:element id="static_term-neigh" name="neigh">
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element name="loc1" type="Location_type"/>
+    <xs:element name="loc2" type="Location_type"/>
+   </xs:sequence>
+   <xs:attribute name="value" type="Boolean_type"/>
+  </xs:complexType>
+ </xs:element>
+<xs:element id="static_term-covered" name="covered">
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element name="loc" type="Location_type"/>
+   </xs:sequence>
+   <xs:attribute name="value" type="Boolean_type"/>
+  </xs:complexType>
+ </xs:element>
+<xs:element id="static_term-batteryRecharging" name="batteryRecharging">
+  <xs:complexType>
+   <xs:sequence/>
+   <xs:attribute name="value" type="Integer_type"/>
+  </xs:complexType>
+ </xs:element>
+
+
+
+
+
+
+
+
+
+
+
+ <xs:simpleType name="Status_type">
+  <xs:restriction base="xs:string">
+   <xs:enumeration value="ok"/>
+   <xs:enumeration value="fire"/>
+   <xs:enumeration value="debris"/>
+  </xs:restriction>
+ </xs:simpleType>
+<xs:element id="dynamic_term-at" name="at">
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element name="service" type="Service"/>
+   </xs:sequence>
+   <xs:attribute name="value" type="Location_type"/>
+   <xs:attribute default="true" name="relevant" type="Boolean_type"/>
+  </xs:complexType>
+ </xs:element>
+<xs:element id="dynamic_term-evacuated" name="evacuated">
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element name="loc" type="Location_type"/>
+   </xs:sequence>
+   <xs:attribute name="value" type="Boolean_type"/>
+   <xs:attribute default="true" name="relevant" type="Boolean_type"/>
+  </xs:complexType>
+ </xs:element>
+<xs:element id="dynamic_term-status" name="status">
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element name="loc" type="Location_type"/>
+   </xs:sequence>
+   <xs:attribute name="value" type="Status_type"/>
+   <xs:attribute default="true" name="relevant" type="Boolean_type"/>
+  </xs:complexType>
+ </xs:element>
+<xs:element id="dynamic_term-photoTaken" name="photoTaken">
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element name="loc" type="Location_type"/>
+   </xs:sequence>
+   <xs:attribute name="value" type="Boolean_type"/>
+   <xs:attribute default="true" name="relevant" type="Boolean_type"/>
+  </xs:complexType>
+ </xs:element>
+<xs:element id="dynamic_term-batteryLevel" name="batteryLevel">
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element name="rbt" type="Robot"/>
+   </xs:sequence>
+   <xs:attribute name="value" type="Integer_type"/>
+   <xs:attribute default="false" name="relevant" type="Boolean_type"/>
+  </xs:complexType>
+ </xs:element>
+<xs:element id="dynamic_term-generalBattery" name="generalBattery">
+  <xs:complexType>
+   <xs:sequence/>
+   <xs:attribute name="value" type="Integer_type"/>
+   <xs:attribute default="false" name="relevant" type="Boolean_type"/>
+  </xs:complexType>
+ </xs:element>
+
+
+
+
+<xs:simpleType name="location_type" url="http://smartpm.cloudapp.net/gpsrules/GPSrules1417622696.xml">
+  <xs:restriction base="xs:string">
+   <xs:enumeration value="Loc00"/>
+   <xs:enumeration value="Loc01"/>
+   <xs:enumeration value="Loc02"/>
+   <xs:enumeration value="Loc03"/>
+   <xs:enumeration value="Loc04"/>
+   <xs:enumeration value="Loc10"/>
+   <xs:enumeration value="Loc11"/>
+   <xs:enumeration value="Loc12"/>
+   <xs:enumeration value="Loc13"/>
+   <xs:enumeration value="Loc14"/>
+   <xs:enumeration value="Loc20"/>
+   <xs:enumeration value="Loc21"/>
+   <xs:enumeration value="Loc22"/>
+   <xs:enumeration value="Loc23"/>
+   <xs:enumeration value="Loc24"/>
+   <xs:enumeration value="Loc30"/>
+   <xs:enumeration value="Loc31"/>
+   <xs:enumeration value="Loc32"/>
+   <xs:enumeration value="Loc33"/>
+   <xs:enumeration value="Loc34"/>
+   <xs:enumeration value="Loc40"/>
+   <xs:enumeration value="Loc41"/>
+   <xs:enumeration value="Loc42"/>
+   <xs:enumeration value="Loc43"/>
+   <xs:enumeration value="Loc44"/>
+  </xs:restriction>
+ </xs:simpleType>
+</xs:schema>
