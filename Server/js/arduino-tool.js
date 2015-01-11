@@ -1,36 +1,35 @@
-var createSlider = function ($slider, values) {
-	$slider.slider({
-		min: 0,
-		max: 100,
-		step: 2,
-		values: values,
-		slide: function(event, ui) {
-			// delete the table
-			document.getElementById("volList").innerHTML = '';
-			sliderValues = [0];
-			for (var i = 0; i < ui.values.length; ++i) {
-//				$("input.sliderValue[data-index=" + i + "]").val(ui.values[i]);
-				// create new table
-				sliderValues[sliderValues.length] = ui.values[i];
-			}
-			sliderValues[sliderValues.length] = 100;
-			sliderValues.sort(function(a, b){return a-b});
-			for (var i = 1; i < sliderValues.length; i++) {
-				addRow(sliderValues[i-1], sliderValues[i], "value"+i);
-			}
-		}
-	});        
-};
+var sensor_type;
+var tempMin;
+var tempMax;
 
 $(document).ready(function() {
 	correctValue = false;
 	while (correctValue == false) {
-		//var fileName = prompt("Enter name of sensor file i.e. humidity", "humidity");
+
+		sensor_type = prompt("Enter sensor type: hum for humidity, temp for temperature", "hum");
 		var nrValues = parseInt(prompt("Enter number of sliders", 3));
+		
 		if (nrValues < 1 || nrValues > 9 || isNaN(nrValues)) {
 			alert("Number of sliders must be between 1 and 9!");
 		} else {
 			correctValue = true;
+		}
+		
+		if (sensor_type !== "hum" && sensor_type !== "temp") {
+			alert("Not listed sensor type");
+			correctValue = false;
+		} else {
+			correctValue = true;
+		}
+		
+		if (sensor_type == "hum"){
+			document.getElementById("sensor-name").innerHTML += "humidity sensor:";
+			tempMin = 0;
+			tempMax = 80;
+		} else if (sensor_type == "temp") {
+			document.getElementById("sensor-name").innerHTML += "temperature sensor:";
+			tempMin = 0;
+			tempMax = 70;
 		}
 	}
 	
@@ -51,6 +50,30 @@ $(document).ready(function() {
 //		$("#slider").slider("values", $this.data("index"), $this.val());
 //	});
 });
+
+var createSlider = function ($slider, values) {
+	$slider.slider({
+		min: tempMin,
+		max: tempMax,
+		step: 2,
+		values: values,
+		slide: function(event, ui) {
+			// delete the table
+			document.getElementById("volList").innerHTML = '';
+			sliderValues = [0];
+			for (var i = 0; i < ui.values.length; ++i) {
+//				$("input.sliderValue[data-index=" + i + "]").val(ui.values[i]);
+				// create new table
+				sliderValues[sliderValues.length] = ui.values[i];
+			}
+			sliderValues[sliderValues.length] = tempMax;
+			sliderValues.sort(function(a, b){return a-b});
+			for (var i = 1; i < sliderValues.length; i++) {
+				addRow(sliderValues[i-1], sliderValues[i], "value"+i);
+			}
+		}
+	});        
+};
 
 function addRow(low, high, name) {
     
@@ -101,7 +124,7 @@ function printXml() {
 	$.ajax({
         url: 'http://smartpm.cloudapp.net/arduinoPost.php',
         type: 'POST',
-        data: "rules=" + encodeURI(xml),
+        data: "rules=" + encodeURI(xml) + "&sensor_type=" + encodeURI(sensor_type),
         success: function (data) {
         	document.getElementById("resultXMLURL").innerHTML = data;
 			window.prompt("Copy to clipboard: Ctrl+C, Enter", data);
