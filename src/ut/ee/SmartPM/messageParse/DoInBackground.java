@@ -181,7 +181,7 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 	        			
 	                    mLl.setVisibility(View.VISIBLE);
 	        			
-	        			// walk thru our form elements and dynamically create them, leveraging our mini library of tools.
+	        			// walk through  our form elements and dynamically create them, leveraging our mini library of tools.
 	        	        int i;
 	        	        for (i=0;i<theForm.fields.size();i++) {
 	        	        	if (theForm.fields.elementAt(i).getType().equals("text")) {
