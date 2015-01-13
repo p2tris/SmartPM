@@ -1,12 +1,12 @@
 var sensor_type;
 var tempMin;
 var tempMax;
-
+var sensorsList = ["hum", "temp", "hcho", "mq2", "mq3", "mq5", "mq9"];
 $(document).ready(function() {
 	correctValue = false;
 	while (correctValue == false) {
 
-		sensor_type = prompt("Enter sensor type: hum for humidity, temp for temperature", "hum");
+		sensor_type = prompt("Enter sensor type: hum for humidity, temp for temperature, hcho, mq2/3/5/9", "hum");
 		var nrValues = parseInt(prompt("Enter number of sliders", 3));
 		
 		if (nrValues < 1 || nrValues > 9 || isNaN(nrValues)) {
@@ -15,7 +15,7 @@ $(document).ready(function() {
 			correctValue = true;
 		}
 		
-		if (sensor_type !== "hum" && sensor_type !== "temp") {
+		if (jQuery.inArray(sensor_type, sensorsList)) {
 			alert("Not listed sensor type");
 			correctValue = false;
 		} else {
@@ -30,6 +30,10 @@ $(document).ready(function() {
 			document.getElementById("sensor-name").innerHTML += "temperature sensor:";
 			tempMin = 0;
 			tempMax = 70;
+		} else {
+			document.getElementById("sensor-name").innerHTML += sensor_type + " gas sensor:";
+			tempMin = 0;
+			tempMax = 100;
 		}
 	}
 	
@@ -55,7 +59,7 @@ var createSlider = function ($slider, values) {
 	$slider.slider({
 		min: tempMin,
 		max: tempMax,
-		step: 2,
+		step: 1,
 		values: values,
 		slide: function(event, ui) {
 			// delete the table
