@@ -1,7 +1,8 @@
 var sensor_type;
 var tempMin;
 var tempMax;
-var sensorsList = ["hum", "temp", "hcho", "mq2", "mq3", "mq5", "mq9"];
+var sensorsList = ["hum","temp","hcho","mq2","mq3","mq5","mq9"];
+
 $(document).ready(function() {
 	correctValue = false;
 	while (correctValue == false) {
@@ -15,7 +16,7 @@ $(document).ready(function() {
 			correctValue = true;
 		}
 		
-		if (jQuery.inArray(sensor_type, sensorsList)) {
+		if (!isInArray(sensor_type,sensorsList)) {
 			alert("Not listed sensor type");
 			correctValue = false;
 		} else {
@@ -30,7 +31,7 @@ $(document).ready(function() {
 			document.getElementById("sensor-name").innerHTML += "temperature sensor:";
 			tempMin = 0;
 			tempMax = 70;
-		} else {
+		} else if (isInArray(sensor_type, sensorsList)) {
 			document.getElementById("sensor-name").innerHTML += sensor_type + " gas sensor:";
 			tempMin = 0;
 			tempMax = 100;
@@ -78,6 +79,10 @@ var createSlider = function ($slider, values) {
 		}
 	});        
 };
+
+function isInArray(value, array) {
+	return array.indexOf(value) > -1;
+}
 
 function addRow(low, high, name) {
     
