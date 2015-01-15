@@ -11,6 +11,8 @@ import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Map;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -31,6 +33,7 @@ import org.xml.sax.SAXException;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
@@ -47,6 +50,8 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
     
     String tag = "DynamicFormXML";
 	XmlGuiForm theForm;
+	
+	public static final String PREFS_NAME = "MyPrefsFile";
 
     public DoInBackground(Context context, LinearLayout ll, Button btn, TextView lblMessage) {
 
@@ -246,6 +251,17 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 	        	        				if(((LinearLayout) mLl).getChildCount() > 0) 
 	        	        				    ((LinearLayout) mLl).removeAllViews(); 
 	        	        				mLblMessage.setText("No tasks");
+	        	        				SharedPreferences settings = mContext.getSharedPreferences(PREFS_NAME, 0);
+	        	        				SharedPreferences.Editor editor = settings.edit();
+	        	            		    
+	        	        				Map<String,?> keys = settings.getAll();
+
+	        	        				for(Map.Entry<String,?> entry : keys.entrySet()){
+	        	        					if(!(entry.getKey()).equals("name")){
+	        	        						editor.remove(entry.getKey());
+	        	        						editor.commit();
+	        	        					}          
+	        	        				 }
 	        	        			}
 	        					}
 	        				  })

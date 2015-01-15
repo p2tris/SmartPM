@@ -57,6 +57,17 @@ public class MainActivity extends Activity {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         actorName = settings.getString("name", "Anon");
         
+        SharedPreferences.Editor editor = settings.edit();
+	    		    
+		Map<String,?> keys = settings.getAll();
+
+		for(Map.Entry<String,?> entry : keys.entrySet()){
+			if(!(entry.getKey()).equals("name")){
+				editor.remove(entry.getKey());
+				editor.commit();
+			}          
+		 }
+        
 		//Get Global Controller Class object (see application tag in AndroidManifest.xml)
 		aController = (Controller) getApplicationContext();
 		
