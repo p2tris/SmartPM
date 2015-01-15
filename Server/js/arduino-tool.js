@@ -31,10 +31,18 @@ $(document).ready(function() {
 			document.getElementById("sensor-name").innerHTML += "temperature sensor:";
 			tempMin = 0;
 			tempMax = 70;
-		} else if (isInArray(sensor_type, sensorsList)) {
+		} else if (sensor_type == "hcho") {
+			document.getElementById("sensor-name").innerHTML += sensor_type + " gas sensor:";
+			tempMin = 0;
+			tempMax = 60;
+		} else if (sensor_type == "mq3") {
 			document.getElementById("sensor-name").innerHTML += sensor_type + " gas sensor:";
 			tempMin = 0;
 			tempMax = 100;
+		}else if (isInArray(sensor_type, sensorsList)) {
+			document.getElementById("sensor-name").innerHTML += sensor_type + " gas sensor:";
+			tempMin = 0;
+			tempMax = 400;
 		}
 	}
 	
