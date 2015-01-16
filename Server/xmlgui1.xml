@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xmlgui>
-<form id="1" name="SmartPM taskXML" actor="act1" submitTo="http://smartpm.cloudapp.net/xmlgui1-post.php" >
+<form id="1" name="SmartPM taskXML" actor="act1" submitTo="http://www.dis.uniroma1.it/~smartpm/webtool/xmlgui1-post.php" >
 <field name="fname" label="First Name" type="text" required="Y" options="" autoLib="" rules=""/>
 <field name="checked" label="Checked?" type="boolean" required="N" options="" autoLib="" rules=""/>
 <field name="lname" label="Last Name" type="text" required="Y" options="" autoLib="" rules=""/>
 <field name="gender" label="Gender" type="choice" required="Y" options="Male|Female" autoLib="" rules=""/>
-<field name="gps" label="GPS:" type="auto" required="N" options="" autoLib="http://smartpm.cloudapp.net/SmartPM_libGPS.apk" rules="http://smartpm.cloudapp.net/GPSrules1415620007.xml"/>
+<field name="gps" label="GPS:" type="auto" required="N" options="" autoLib="http://www.dis.uniroma1.it/~smartpm/webtool/SmartPM_libGPS.apk" rules="http://smartpm.cloudapp.net/GPSrules1415620007.xml"/>
 <field name="age" label="Age on 15 Oct. 2010" type="numeric" required="N" options="" autoLib="" rules=""/>
-<field name="noize" label="Noize level:" type="auto" required="N" options="" autoLib="http://smartpm.cloudapp.net/SmartPM_libNoize.apk" rules="http://smartpm.cloudapp.net/Noizerules1415619837.xml"/>
-<field name="humid" label="Humidity level:" type="auto" required="N" options="" autoLib="http://smartpm.cloudapp.net/SmartPM_libHumid.apk" rules="http://smartpm.cloudapp.net/noiserules/Noizerules1419330054.xml"/>
+<field name="noize" label="Noize level:" type="auto" required="N" options="" autoLib="http://www.dis.uniroma1.it/~smartpm/webtool/SmartPM_libNoize.apk" rules="http://smartpm.cloudapp.net/Noizerules1415619837.xml"/>
+<field name="humid" label="Humidity level:" type="auto" required="N" options="" autoLib="http://www.dis.uniroma1.it/~smartpm/webtool/SmartPM_libHumid.apk" rules="http://smartpm.cloudapp.net/noiserules/Noizerules1419330054.xml"/>
 </form>
 </xmlgui>

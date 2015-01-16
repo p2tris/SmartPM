@@ -219,7 +219,7 @@ function printXml() {
 		}  
 	
 	$.ajax({
-        url: 'http://smartpm.cloudapp.net/GPSrulesPost.php',
+        url: 'http://www.dis.uniroma1.it/~smartpm/webtool/GPSrulesPost.php',
         type: 'POST',
         data: "rules=" + encodeURI(xml),
         success: function (data) {

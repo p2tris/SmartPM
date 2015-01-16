@@ -4,7 +4,8 @@
  */
 define("DB_HOST", "localhost");
 define("DB_USER", "smartpm");
-define("DB_PASSWORD", "OmaEma123");
+// PS - change following line!
+define("DB_PASSWORD", "INSERT YOUR DB PASSWORD HERE");
 define("DB_DATABASE", "smartpm");
 
 /*

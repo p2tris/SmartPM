@@ -1,1 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?><xmlgui><form id="id_1" name="SmartPM taskXML" submitTo="http://smartpm.cloudapp.net/replyToServer.php" ><field name="act1" label="act1" type="text" required="Y" options="" autoLib="" rules=""/></form></xmlgui>

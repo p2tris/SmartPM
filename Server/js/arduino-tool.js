@@ -139,7 +139,7 @@ function printXml() {
 		}  
 	
 	$.ajax({
-        url: 'http://smartpm.cloudapp.net/arduinoPost.php',
+        url: 'http://www.dis.uniroma1.it/~smartpm/webtool/arduinoPost.php',
         type: 'POST',
         data: "rules=" + encodeURI(xml) + "&sensor_type=" + encodeURI(sensor_type),
         success: function (data) {

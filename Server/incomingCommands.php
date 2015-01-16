@@ -70,7 +70,7 @@ function createTaskXML($id, $taskName, $expectedResult, $actName){
 	$filename = "tasks/task".time()."".$actName.".xml";
 	$f = fopen($filename,"a");
 	fprintf($f,'<?xml version="1.0" encoding="utf-8"?><xmlgui>');
-	fprintf($f,'<form id="'.$id.'" name="'.$taskName.'" actor="'.$actName.'" submitTo="http://smartpm.cloudapp.net/replyToServer.php" >');
+	fprintf($f,'<form id="'.$id.'" name="'.$taskName.'" actor="'.$actName.'" submitTo="http://www.dis.uniroma1.it/~smartpm/webtool/replyToServer.php" >');
 	
 	// for each expected result make new field
 	// TODO: get info for xml elements
@@ -103,7 +103,7 @@ function createTaskXML($id, $taskName, $expectedResult, $actName){
 	
 	fprintf($f,'</form></xmlgui>');
 	fclose($f);
-	return "http://smartpm.cloudapp.net/".$filename;
+	return "http://www.dis.uniroma1.it/~smartpm/webtool/".$filename;
 }
 
 function parseTypeFromXSD($expectedResult){
