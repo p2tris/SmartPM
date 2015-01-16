@@ -180,9 +180,18 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 	        		// check if this form is Valid
 	        		if(mBtn.getText() == "Start"){
 	        			
-	        			// Notify server about task being started
-	        			new sendReadyToStart(theForm).execute();
-	        			mBtn.setClickable(false);
+	        			SharedPreferences settings = mContext.getSharedPreferences(PREFS_NAME, 0);
+	        			if(!settings.getBoolean("started", false)){
+		        			// Notify server about task being started
+		        			new sendReadyToStart(theForm).execute();
+		        			mBtn.setClickable(false);
+	        			} else if ((mBtn.getText()).equals("Paused")) {
+		        			mBtn.setClickable(false);
+						} else {
+	        				mBtn.setClickable(true);
+	        			}
+	        			
+	        			
 	        			
 	                    mLl.setVisibility(View.VISIBLE);
 	        			
@@ -258,8 +267,8 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 
 	        	        				for(Map.Entry<String,?> entry : keys.entrySet()){
 	        	        					if(!(entry.getKey()).equals("name")){
-	        	        						editor.remove(entry.getKey());
-	        	        						editor.commit();
+    	        								editor.remove(entry.getKey());
+    	        								editor.commit();
 	        	        					}          
 	        	        				 }
 	        	        			}

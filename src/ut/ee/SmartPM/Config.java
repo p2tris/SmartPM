@@ -8,7 +8,10 @@ public interface Config {
 
 	
 	// CONSTANTS
-	static final String YOUR_SERVER_URL =  "http://smartpm.cloudapp.net/register.php";
+	// Server of Pätris
+//	static final String YOUR_SERVER_URL =  "http://smartpm.cloudapp.net/register.php";
+	// DIAG server
+	static final String YOUR_SERVER_URL =  "http://www.dis.uniroma1.it/~smartpm/webtool/register.php";
 
 	// Google project id
     static final String GOOGLE_SENDER_ID = "64754581420";  // Google project id

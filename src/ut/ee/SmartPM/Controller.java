@@ -111,7 +111,11 @@ public class Controller extends Application{
     	 
         Log.i(Config.TAG, "unregistering device (name = " + name + ")");
         
-        String serverUrl = "http://smartpm.cloudapp.net/unregister.php";
+        // Server of Pätris
+//        String serverUrl = "http://smartpm.cloudapp.net/unregister.php";
+        // DIAG server
+        String serverUrl = "http://www.dis.uniroma1.it/~smartpm/webtool/unregister.php";
+
         Map<String, String> params = new HashMap<String, String>();
         params.put("name", name);
         

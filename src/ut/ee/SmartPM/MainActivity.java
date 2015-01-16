@@ -63,8 +63,14 @@ public class MainActivity extends Activity {
 
 		for(Map.Entry<String,?> entry : keys.entrySet()){
 			if(!(entry.getKey()).equals("name")){
-				editor.remove(entry.getKey());
-				editor.commit();
+				if(!(entry.getKey()).equals("message")){
+					if(!(entry.getKey()).equals("taskName")){
+						if(!(entry.getKey()).equals("started")){
+							editor.remove(entry.getKey());
+							editor.commit();	
+						}
+					}
+				}
 			}          
 		 }
         
@@ -153,7 +159,20 @@ public class MainActivity extends Activity {
 			statusbar.setText("Actor: " + actorName);
 			
 		}
-				
+//		Intent intent = new Intent("my-event");
+//		// add data
+//		intent.putExtra("message", settings.getString("message", "niente"));
+//		mHandleMessageReceiver.onReceive(context, intent);
+//		
+//		Log.d("Intent1",settings.getString("message", "niente"));
+//		
+//		Intent intent2 = new Intent("my-event2");
+//		// add data
+//		intent2.putExtra("message", settings.getString("taskName", "niente"));
+//		mHandleMessageReceiver.onReceive(context, intent2);
+//		
+//		Log.d("Intent2",settings.getString("taskName", "niente"));
+
 	}		
 	
 	// Create a broadcast receiver to get message and show on screen 
@@ -163,6 +182,8 @@ public class MainActivity extends Activity {
 		public void onReceive(Context context, Intent intent) {
 			
 			String newMessage = intent.getExtras().getString(Config.EXTRA_MESSAGE);
+			
+			
 			Map<String, String> messageMap = new HashMap<String, String>();
 			// Splits the string and makes it to object that we can work with 
 			if(newMessage != null){
@@ -182,13 +203,40 @@ public class MainActivity extends Activity {
 				
 				Log.d("TASKNAME", messageMap.get("taskName"));
 				if(messageMap.get("taskName").equals("start")){
+					
+					SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+				    SharedPreferences.Editor editor = settings.edit();
+				    editor.putString("taskName", newMessage);
+				    editor.putBoolean("started", true);
+
+				    // Commit the edits!
+				    editor.commit();
+					
 					executeBtn.setClickable(true);
 					statusbar.setText("Actor: " + actorName + " Status: Start");
 				} else if (messageMap.get("taskName").equals("pause")) {
+					
+					SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+				    SharedPreferences.Editor editor = settings.edit();
+				    editor.putString("taskName", newMessage);
+
+				    // Commit the edits!
+				    editor.commit();
+				    
 					executeBtn.setClickable(false);
+					executeBtn.setText("Paused");
 					statusbar.setText("Actor: " + actorName + " Status: Adaptation in process");
 				} else if (messageMap.get("taskName").equals("resume")) {
+					
+					SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+				    SharedPreferences.Editor editor = settings.edit();
+				    editor.putString("taskName", newMessage);
+
+				    // Commit the edits!
+				    editor.commit();
+				    
 					executeBtn.setClickable(true);
+					executeBtn.setText("Stop");
 					statusbar.setText("Actor: " + actorName + " Status: Resumed from adaptation");
 				}
 			} else {
@@ -198,6 +246,14 @@ public class MainActivity extends Activity {
 			Toast.makeText(getApplicationContext(), "Got Message: " + newMessage, Toast.LENGTH_SHORT).show();
 			
 			if(messageMap.containsKey("URL")){
+				
+				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+			    SharedPreferences.Editor editor = settings.edit();
+			    editor.putString("message", newMessage);
+
+			    // Commit the edits!
+			    editor.commit();
+			    
 				statusbar.setText("Actor: " + actorName + " Status: New task");
 				lblMessage.setText(messageMap.get("taskName"));
 				executeBtn.setVisibility(View.VISIBLE);
@@ -278,6 +334,17 @@ public class MainActivity extends Activity {
 				// Register on our server
 				// On server creates a new user
 				aController.unregister(context, name);
+				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+				SharedPreferences.Editor editor = settings.edit();
+    		    
+				Map<String,?> keys = settings.getAll();
+
+				for(Map.Entry<String,?> entry : keys.entrySet()){
+					if(!(entry.getKey()).equals("name")){
+						editor.remove(entry.getKey());
+						editor.commit();	
+					}
+				}
 				
 				return null;
 			}
@@ -293,6 +360,31 @@ public class MainActivity extends Activity {
 		mRegisterTask.execute(null, null, null);
 		GCMRegistrar.unregister(context);
     	finish();            
+    }
+    
+    @Override
+    protected void onResume() {
+    	super.onResume();
+    	
+    	LinearLayout mLl = (LinearLayout) findViewById(R.id.ll);
+    	if(((LinearLayout) mLl).getChildCount() > 0) 
+		    ((LinearLayout) mLl).removeAllViews(); 
+    	
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+
+    	Intent intent = new Intent("my-event");
+		// add data
+		intent.putExtra("message", settings.getString("message", "niente"));
+		mHandleMessageReceiver.onReceive(context, intent);
+		
+		Log.d("Intent1",settings.getString("message", "niente"));
+		
+		Intent intent2 = new Intent("my-event2");
+		// add data
+		intent2.putExtra("message", settings.getString("taskName", "niente"));
+		mHandleMessageReceiver.onReceive(context, intent2);
+		
+		Log.d("Intent2",settings.getString("taskName", "niente"));
     }
 
 }
