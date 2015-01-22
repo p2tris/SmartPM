@@ -231,6 +231,8 @@ public class MainActivity extends Activity {
 					SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 				    SharedPreferences.Editor editor = settings.edit();
 				    editor.putString("taskName", newMessage);
+				    editor.putBoolean("started", true);
+
 
 				    // Commit the edits!
 				    editor.commit();
