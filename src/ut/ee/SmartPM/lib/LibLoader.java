@@ -35,7 +35,7 @@ public class LibLoader {
 		this.rules = rules;
 		
 		// Check if folder exists
-        File folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/SmartPM");
+        File folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/SmartPM/");
         if (!folder.exists()) {
             folder.mkdir();
             Log.d("DIRECTORY", "created");
@@ -80,9 +80,10 @@ public class LibLoader {
             super.onPreExecute();
         }
 
-        // Download Music File from Internet
+        // Download File from Internet
         @Override
         protected String doInBackground(String... f_url) {
+        	Log.d("Download","Stared");
             int count;
             try {
                 URL url = new URL(f_url[0]);
@@ -109,6 +110,7 @@ public class LibLoader {
                 // Close streams
                 output.close();
                 input.close();
+            	Log.d("Download","Fino");
             } catch (Exception e) {
                 Log.e("Error: ", e.getMessage());
             }
