@@ -66,7 +66,7 @@ function placeMarker(location) {
 			} else {
 				var colnr = prompt("Enter number of columns", 1);
 				var rownr = prompt("Enter number of rows", 1);
-				var name = prompt("Enter default name value", "Loc");
+				var name = prompt("Enter default name value", "loc");
 				var rowstep = (fstLat - sndLat) / rownr;
 				var colstep = (sndLon - fstLon) / colnr;
 				
@@ -212,6 +212,15 @@ function printXml() {
 							  alert("All the names must be unique!");
 							  return;
 						  }
+						  if(col.textContent[0].toUpperCase() == col.textContent[0])
+						  {
+						     alert('First character can not be upper case.');  
+						     return;
+						  }
+						  if(col.textContent.indexOf(' ') >= 0){
+							  alert('No white spaces allowed in values.');
+							  return;
+						  }
 						break;
 					}
 				}
@@ -219,7 +228,7 @@ function printXml() {
 		}  
 	
 	$.ajax({
-        url: 'http://www.dis.uniroma1.it/~smartpm/webtool/GPSrulesPost.php',
+        url: 'http://smartpm.cloudapp.net/GPSrulesPost.php',
         type: 'POST',
         data: "rules=" + encodeURI(xml),
         success: function (data) {

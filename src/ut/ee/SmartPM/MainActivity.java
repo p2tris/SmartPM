@@ -159,19 +159,6 @@ public class MainActivity extends Activity {
 			statusbar.setText("Actor: " + actorName);
 			
 		}
-//		Intent intent = new Intent("my-event");
-//		// add data
-//		intent.putExtra("message", settings.getString("message", "niente"));
-//		mHandleMessageReceiver.onReceive(context, intent);
-//		
-//		Log.d("Intent1",settings.getString("message", "niente"));
-//		
-//		Intent intent2 = new Intent("my-event2");
-//		// add data
-//		intent2.putExtra("message", settings.getString("taskName", "niente"));
-//		mHandleMessageReceiver.onReceive(context, intent2);
-//		
-//		Log.d("Intent2",settings.getString("taskName", "niente"));
 
 	}		
 	

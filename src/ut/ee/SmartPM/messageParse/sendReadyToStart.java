@@ -39,7 +39,8 @@ public class sendReadyToStart extends AsyncTask<String, Void, Void>{
                 // Server of Pätris
                 // httppost = new HttpPost("http://smartpm.cloudapp.net/replyToServer.php");
                 // DIAG server
-                httppost = new HttpPost("http://www.dis.uniroma1.it/~smartpm/webtool/replyToServer.php");
+                Log.d("READYTOSERER","READY");
+                httppost = new HttpPost("http://smartpm.cloudapp.net/replyToServer.php");
                 // Add your data
                 nameValuePairs = new ArrayList<NameValuePair>(2);
                 nameValuePairs.add(new BasicNameValuePair("actName", theForm.getActor().trim()));

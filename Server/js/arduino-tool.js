@@ -132,6 +132,15 @@ function printXml() {
 							  alert("All the names must be unique!");
 							  return;
 						  }
+						  if(col.textContent[0].toUpperCase() == col.textContent[0])
+						  {
+						     alert('First character can not be upper case.');  
+						     return;
+						  }
+						  if(col.textContent.indexOf(' ') >= 0){
+							  alert('No white spaces allowed in values.');
+							  return;
+						  }
 						break;
 					}
 				}
@@ -139,7 +148,7 @@ function printXml() {
 		}  
 	
 	$.ajax({
-        url: 'http://www.dis.uniroma1.it/~smartpm/webtool/arduinoPost.php',
+        url: 'http://smartpm.cloudapp.net/arduinoPost.php',
         type: 'POST',
         data: "rules=" + encodeURI(xml) + "&sensor_type=" + encodeURI(sensor_type),
         success: function (data) {

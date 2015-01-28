@@ -29,25 +29,32 @@ Array(
 */
 foreach($arr as $elem){
 	$ar1 = (preg_split('/\\] \\[|\\[|\\]/', $elem, 0, PREG_SPLIT_NO_EMPTY));
+	
 	foreach($ar1 as $elem2){
 			$temparr = array_diff(explode(',' ,$elem2), array(""));
-			if(empty($temparr) != 1){
+			if(empty($temparr) != 1 || sizeof($commandsArr) == 4){
 				array_push($commandsArr, $temparr);
 			}
 	}
 }
 
+//print_r($commandsArr);
 // Logic of different commands
 $taskType = trim($commandsArr[0][0]);
+//print_r($taskType);
 if($taskType == "assign"){
+	$actName = trim($commandsArr[1][0]);
+	$taskName = trim($commandsArr[3][0]);
+	$id = trim($commandsArr[3][1]);	
+	if(sizeof($commandsArr) > 5){
+		$expectedResult = $commandsArr[5];
+	} else {
+		$expectedResult = array();
+	}
+	//print_r($expectedResult);
 	
-	$actName = $commandsArr[1][0];
-	$taskName = $commandsArr[3][0];
-	$id = $commandsArr[3][1];
-	$expectedResult = $commandsArr[5];
-
 	// create task XML
-	$url = createTaskXML($id, $taskName, $expectedResult, $actName);
+	$url = createTaskXML($id, $taskName, $expectedResult, $actName, $commandsArr);
 	
 	// send to device following message:
 	// taskName|Fill the Form;URL|http://halapuu.host56.com/pn/xmlgui1.xml
@@ -65,35 +72,37 @@ if($taskType == "assign"){
 	sendToDevice(null, null, "resume");
 }
 
-function createTaskXML($id, $taskName, $expectedResult, $actName){
+function createTaskXML($id, $taskName, $expectedResult, $actName, $commandsArr){
 		
 	$filename = "tasks/task".time()."".$actName.".xml";
 	$f = fopen($filename,"a");
 	fprintf($f,'<?xml version="1.0" encoding="utf-8"?><xmlgui>');
-	fprintf($f,'<form id="'.$id.'" name="'.$taskName.'" actor="'.$actName.'" submitTo="http://www.dis.uniroma1.it/~smartpm/webtool/replyToServer.php" >');
+	fprintf($f,'<form id="'.$id.'" name="'.$taskName.'" actor="'.$actName.'" submitTo="http://smartpm.cloudapp.net/replyToServer.php" >');
 	
 	// for each expected result make new field
-	// TODO: get info for xml elements
 	$i = 0;
+	//print_r($expectedResult);
+	//fprintf($f,print_r($expectedResult, true));
+	//fprintf($f,print_r($commandsArr, true));
 	if (sizeof($expectedResult) == 0){
-		fprintf($f,'<field name="'.$i.'_field" label="'.$taskName.' expected: '.$fields.'" type="text" required="N" options="" autoLib="" rules=""/>');
+		fprintf($f,'<field name="'.$i.'_field" label="'.$taskName.' - Expect: '.$fields.' " type="text" required="N" options="" autoLib="" rules=""/>');
 	} else {
 		foreach ($expectedResult as $fields){
 			if ($fields == "true" || $fields == "false"){
-				fprintf($f,'<field name="'.$i.'_field" label="'.$taskName.' expected: '.$fields.'" type="boolean" required="N" options="" autoLib="" rules=""/>');
+				fprintf($f,'<field name="'.$i.'_field" label="'.$taskName.' - Expect: '.$fields.' " type="boolean" required="N" options="" autoLib="" rules=""/>');
 			} else {
 				// array of info from XSD
 				$typeOptLibRule = parseTypeFromXSD($fields);
 				if ($typeOptLibRule[0] == 'automaticTask'){
-					fprintf($f,'<field name="'.$i.'_field" label="'.$taskName.' expected '.$fields.'" type="auto" required="N" options="" autoLib="'.$typeOptLibRule[2].'" rules="'.$typeOptLibRule[1].'"/>');
+					fprintf($f,'<field name="'.$i.'_field" label="'.$taskName.' - Expect: '.$fields.' Real: " type="auto" required="N" options="" autoLib="'.$typeOptLibRule[2].'" rules="'.$typeOptLibRule[1].'"/>');
 				} elseif (is_numeric($fields)){
-					fprintf($f,'<field name="'.$i.'_field" label="'.$taskName.' expected between: '.$typeOptLibRule[0].' and '.$typeOptLibRule[1].'" type="numeric" required="Y" options="" autoLib="" rules=""/>');
+					fprintf($f,'<field name="'.$i.'_field" label="'.$taskName.' - Expect from: '.$typeOptLibRule[0].' to '.$typeOptLibRule[1].' " type="numeric" required="Y" options="" autoLib="" rules=""/>');
 				} else {
 					$options = "";
 					foreach ($typeOptLibRule as $option){
 						$options .= $option."|";
 					}
-					fprintf($f,'<field name="'.$i.'_field" label="'.$taskName.' expected '.$fields.'" type="choice" required="N" options="'.substr($options, 0, -1).'" autoLib="" rules=""/>');
+					fprintf($f,'<field name="'.$i.'_field" label="'.$taskName.' - Expect: '.$fields.' " type="choice" required="N" options="'.substr($options, 0, -1).'" autoLib="" rules=""/>');
 				}
 			}
 			
@@ -103,7 +112,7 @@ function createTaskXML($id, $taskName, $expectedResult, $actName){
 	
 	fprintf($f,'</form></xmlgui>');
 	fclose($f);
-	return "http://www.dis.uniroma1.it/~smartpm/webtool/".$filename;
+	return "http://smartpm.cloudapp.net/".$filename;
 }
 
 function parseTypeFromXSD($expectedResult){
@@ -132,7 +141,7 @@ function parseTypeFromXSD($expectedResult){
 			} elseif (strpos($elem['@attributes']['name'], '_type') !== false) {
 				foreach($elem['restriction']['enumeration'] as $choice){
 					foreach($choice['@attributes'] as $attr){
-						if($attr == $expectedResult){
+						if($attr == trim($expectedResult)){
 							$enumArr = $elem;
 							break 4;
 						}

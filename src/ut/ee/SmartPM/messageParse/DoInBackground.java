@@ -181,8 +181,10 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 	        		if(mBtn.getText() == "Start"){
 	        			
 	        			SharedPreferences settings = mContext.getSharedPreferences(PREFS_NAME, 0);
+	        			Log.d("sharedPref", settings.getBoolean("started", false)+"");
 	        			if(!settings.getBoolean("started", false)){
 		        			// Notify server about task being started
+	        				Log.d("Sending","Sending");
 		        			new sendReadyToStart(theForm).execute();
 		        			mBtn.setClickable(false);
 	        			} else if ((mBtn.getText()).equals("Paused")) {
