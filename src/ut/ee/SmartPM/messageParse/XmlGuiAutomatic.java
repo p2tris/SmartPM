@@ -4,10 +4,12 @@
 
 package ut.ee.SmartPM.messageParse;
 
+import ut.ee.SmartPM.R;
 import ut.ee.SmartPM.lib.LibLoader;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,6 +24,9 @@ public class XmlGuiAutomatic extends LinearLayout {
 		this.rules = rules;
 		
 		this.mContext = context;
+		
+		ImageView pin = new ImageView(context);
+		pin.setImageResource(R.drawable.pin);
 		label = new TextView(context);
 		label.setText(labelText);
 		autoLabel = new TextView(context);
@@ -33,6 +38,7 @@ public class XmlGuiAutomatic extends LinearLayout {
 		
 		Log.d("APP", "after libloader");
 		
+		this.addView(pin);
 		this.addView(label);
 		this.addView(autoLabel);
 	}

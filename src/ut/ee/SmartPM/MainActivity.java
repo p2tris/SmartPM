@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +30,7 @@ import com.google.android.gcm.GCMRegistrar;
 
 public class MainActivity extends Activity {
 	// label to display gcm messages
-	TextView lblMessage;
+	public ImageView imageView1;
 	Controller aController;
 	public LinearLayout ll;
 	Button executeBtn;
@@ -93,10 +94,9 @@ public class MainActivity extends Activity {
 		
 		name = i.getStringExtra("name");
 		email = i.getStringExtra("email");		
-		
-		lblMessage = (TextView) findViewById(R.id.lblMessage);
-		executeBtn = (Button)findViewById(R.id.StartStop);
 		statusbar = (TextView) findViewById(R.id.textView1);
+		imageView1 = (ImageView) findViewById(R.id.imageView1);
+		executeBtn = (Button)findViewById(R.id.StartStop);
 		
 		// Make sure the device has the proper dependencies.
 		GCMRegistrar.checkDevice(this);
@@ -152,13 +152,11 @@ public class MainActivity extends Activity {
 			}
 		}
 		
-		if (lblMessage.getText() == "") {
-			lblMessage.setText("No tasks");
-			executeBtn.setClickable(false);
-			executeBtn.setVisibility(View.INVISIBLE);
-			statusbar.setText("Actor: " + actorName);
+		executeBtn.setClickable(false);
+		executeBtn.setVisibility(View.INVISIBLE);
+		statusbar.setText(actorName);
 			
-		}
+		
 
 	}		
 	
@@ -190,7 +188,8 @@ public class MainActivity extends Activity {
 				
 				Log.d("TASKNAME", messageMap.get("taskName"));
 				if(messageMap.get("taskName").equals("start")){
-					
+					imageView1.setImageResource(R.drawable.greentaskball2);
+
 					SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 				    SharedPreferences.Editor editor = settings.edit();
 				    editor.putString("taskName", newMessage);
@@ -198,9 +197,7 @@ public class MainActivity extends Activity {
 
 				    // Commit the edits!
 				    editor.commit();
-					
 					executeBtn.setClickable(true);
-					statusbar.setText("Actor: " + actorName + " Status: Start");
 				} else if (messageMap.get("taskName").equals("pause")) {
 					
 					SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -209,28 +206,28 @@ public class MainActivity extends Activity {
 
 				    // Commit the edits!
 				    editor.commit();
+					imageView1.setImageResource(R.drawable.idletaskball);
+
 				    
 					executeBtn.setClickable(false);
 					executeBtn.setText("Paused");
-					statusbar.setText("Actor: " + actorName + " Status: Adaptation in process");
 				} else if (messageMap.get("taskName").equals("resume")) {
 					
 					SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 				    SharedPreferences.Editor editor = settings.edit();
 				    editor.putString("taskName", newMessage);
 				    editor.putBoolean("started", true);
-
-
 				    // Commit the edits!
 				    editor.commit();
 				    
+					imageView1.setImageResource(R.drawable.greentaskball2);
+					
 					executeBtn.setClickable(true);
 					executeBtn.setText("Stop");
-					statusbar.setText("Actor: " + actorName + " Status: Resumed from adaptation");
 				}
 			} else {
 				// Display message on the screen
-				lblMessage.setText("New TASK");
+				imageView1.setImageResource(R.drawable.greentaskball);
 			}
 			Toast.makeText(getApplicationContext(), "Got Message: " + newMessage, Toast.LENGTH_SHORT).show();
 			
@@ -243,13 +240,12 @@ public class MainActivity extends Activity {
 			    // Commit the edits!
 			    editor.commit();
 			    
-				statusbar.setText("Actor: " + actorName + " Status: New task");
-				lblMessage.setText(messageMap.get("taskName"));
+				imageView1.setImageResource(R.drawable.greentaskball2);
 				executeBtn.setVisibility(View.VISIBLE);
+				executeBtn.setText("Start");
 				LinearLayout ll = (LinearLayout) findViewById(R.id.ll);
-				new DoInBackground(context, ll, executeBtn, lblMessage).execute(messageMap.get("URL"));
+				new DoInBackground(context, ll, executeBtn, imageView1).execute(messageMap.get("URL"));
 			} else {
-				lblMessage.setText("No task");
 			}
 									
 			// Releasing wake lock

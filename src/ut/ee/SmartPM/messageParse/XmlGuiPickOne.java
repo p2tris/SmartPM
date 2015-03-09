@@ -14,8 +14,10 @@
 
 package ut.ee.SmartPM.messageParse;
 
+import ut.ee.SmartPM.R;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Spinner;
@@ -29,12 +31,15 @@ public class XmlGuiPickOne extends LinearLayout {
 	
 	public XmlGuiPickOne(Context context,String labelText,String options) {
 		super(context);
+		ImageView pin = new ImageView(context);
+		pin.setImageResource(R.drawable.pin);
 		label = new TextView(context);
 		label.setText(labelText);
 		spinner = new Spinner(context);
 		String []opts = options.split("\\|");
 		aa = new ArrayAdapter<String>( context, android.R.layout.simple_spinner_item,opts);
 		spinner.setAdapter(aa);
+		this.addView(pin);
 		this.addView(label);
 		this.addView(spinner);
 	}

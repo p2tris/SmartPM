@@ -14,9 +14,11 @@
 
 package ut.ee.SmartPM.messageParse;
 
+import ut.ee.SmartPM.R;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.EditText;
@@ -28,11 +30,14 @@ public class XmlGuiEditBox extends LinearLayout {
 	
 	public XmlGuiEditBox(Context context,String labelText,String initialText) {
 		super(context);
+		ImageView pin = new ImageView(context);
+		pin.setImageResource(R.drawable.pin);
 		label = new TextView(context);
 		label.setText(labelText);
 		txtBox = new EditText(context);
 		txtBox.setText(initialText);
 		txtBox.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT));
+		this.addView(pin);
 		this.addView(label);
 		this.addView(txtBox);
 	}

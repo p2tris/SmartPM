@@ -30,6 +30,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import ut.ee.SmartPM.R;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -38,22 +39,22 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class DoInBackground extends AsyncTask<String, Void, Void> {
 
     Context mContext;
     LinearLayout mLl;
     Button mBtn;
-    TextView mLblMessage;
+    ImageView mLblMessage;
     
     String tag = "DynamicFormXML";
 	XmlGuiForm theForm;
 	
 	public static final String PREFS_NAME = "MyPrefsFile";
 
-    public DoInBackground(Context context, LinearLayout ll, Button btn, TextView lblMessage) {
+    public DoInBackground(Context context, LinearLayout ll, Button btn, ImageView lblMessage) {
 
         this.mContext = context;
         this.mLl = ll;
@@ -173,13 +174,14 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 		{			
 	        
 	        mBtn.setText("Start");
+	        mLblMessage.setImageResource(R.drawable.greentaskball2);
 	        mBtn.setClickable(true);
 	        mLl.setVisibility(View.INVISIBLE);
 	        mBtn.setOnClickListener(new Button.OnClickListener() {
 	        	public void onClick(View v) {
 	        		// check if this form is Valid
 	        		if(mBtn.getText() == "Start"){
-	        			
+	    				mLblMessage.setImageResource(R.drawable.greentaskball2);
 	        			SharedPreferences settings = mContext.getSharedPreferences(PREFS_NAME, 0);
 	        			Log.d("sharedPref", settings.getBoolean("started", false)+"");
 	        			if(!settings.getBoolean("started", false)){
@@ -189,8 +191,11 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 		        			mBtn.setClickable(false);
 	        			} else if ((mBtn.getText()).equals("Paused")) {
 		        			mBtn.setClickable(false);
+		    				mLblMessage.setImageResource(R.drawable.idletaskball);
 						} else {
 	        				mBtn.setClickable(true);
+	        				mLblMessage.setImageResource(R.drawable.greentaskball2);
+
 	        			}
 	        			
 	        			
@@ -253,6 +258,7 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 	        		            		AlertDialog ad = bd.create();
 	        		            		ad.setTitle("Error");
 	        		            		ad.setMessage("Error submitting form");
+	        		    				mLblMessage.setImageResource(R.drawable.greentaskball2);
 	        		            		ad.show();
 	        		            		return;
 	        	        			}else {
@@ -261,10 +267,10 @@ public class DoInBackground extends AsyncTask<String, Void, Void> {
 	        	        				mBtn.setVisibility(View.INVISIBLE);
 	        	        				if(((LinearLayout) mLl).getChildCount() > 0) 
 	        	        				    ((LinearLayout) mLl).removeAllViews(); 
-	        	        				mLblMessage.setText("No tasks");
+	        	        				mLblMessage.setImageResource(R.drawable.notaskball);
 	        	        				SharedPreferences settings = mContext.getSharedPreferences(PREFS_NAME, 0);
 	        	        				SharedPreferences.Editor editor = settings.edit();
-	        	            		    
+	        	        				String actorName = settings.getString("name", "Anon");
 	        	        				Map<String,?> keys = settings.getAll();
 
 	        	        				for(Map.Entry<String,?> entry : keys.entrySet()){
